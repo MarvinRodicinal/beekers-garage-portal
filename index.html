@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beeker's Garage - Employee Portal</title>
+    
+    <!-- Open Graph Meta Tags for Link Previews -->
+    <meta property="og:title" content="Beeker's Garage - Employee Portal">
+    <meta property="og:description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts - Lucid City RP">
+    <meta property="og:image" content="https://i.imgur.com/your-uploaded-image.png">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Beeker's Garage">
+    
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Beeker's Garage - Employee Portal">
+    <meta name="twitter:description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts">
+    <meta name="twitter:image" content="https://i.imgur.com/your-uploaded-image.png">
+    
+    <!-- Standard Meta Tags -->
+    <meta name="description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts - Lucid City RP">
+    <meta name="keywords" content="Beeker's Garage, Lucid City, RP, crafting calculator, invoice, employees">
+    <meta name="author" content="Beeker's Garage & Parts">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --beeker-green: #2d5016;
+            --beeker-light-green: #4a7c2a;
+            --beeker-dark-green: #1a3009;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #495057;
+            --text-dark: #212529;
+            --shadow: 0 2px 8px rgba(45, 80, 22, 0.1);
+            --shadow-hover: 0 4px 16px rgba(45, 80, 22, 0.15);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-primary);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--beeker-green);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .logo img {
+            height: 60px;
+            width: auto;
+            border-radius: 8px;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-teal);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--beeker-green);
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Recipe Input */
+        .recipe-input {
+            width: 80px;
+            padding: 0.5rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            background: var(--white);
+        }
+        
+        .recipe-input:focus {
+            outline: none;
+            border-color: var(--beeker-green);
+        }
+        
+        /* Remove number input arrows */
+        #repair-counter::-webkit-outer-spin-button,
+        #repair-counter::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        #repair-counter {
+            -moz-appearance: textfield;
+        }
+        
+        /* Additional Material Icons */
+        .material-icon.electronics {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+        }
+        
+        .material-icon.wire {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+        }
+        
+        .material-icon.glass {
+            background: linear-gradient(135deg, #17a2b8, #6610f2);
+        }
+        
+        .material-icon.rubber {
+            background: linear-gradient(135deg, #343a40, #495057);
+        }
+        
+        /* Totals Section */
+        .totals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .total-item {
+            background: linear-gradient(135deg, var(--light-gray), var(--white));
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .total-item:hover {
+            border-color: var(--beeker-green);
+            transform: translateY(-1px);
+        }
+        
+        .total-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .total-name {
+            flex: 1;
+            font-weight: 500;
+            color: var(--beeker-dark-green);
+        }
+        
+        .total-quantity {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--beeker-green);
+            min-width: 60px;
+            text-align: center;
+            background: var(--white);
+            border-radius: 6px;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        /* Recipe Cards */
+        .recipe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .recipe-card {
+            background: var(--white);
+            border: 2px solid var(--medium-gray);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recipe-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc3545, #fd7e14);
+        }
+        
+        .recipe-card.repair-kit::before {
+            background: linear-gradient(90deg, #17a2b8, #20c997);
+        }
+        
+        .recipe-card.heavy-cutter::before {
+            background: linear-gradient(90deg, #28a745, #20c997);
+        }
+        
+        .recipe-card.advanced::before {
+            background: linear-gradient(90deg, #6f42c1, #e83e8c);
+        }
+        
+        .recipe-card.legendary::before {
+            background: linear-gradient(90deg, #fd7e14, #ffc107);
+        }
+        
+        .recipe-card:hover {
+            border-color: var(--primary-teal);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .recipe-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .recipe-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .recipe-card.repair-kit .recipe-icon {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
+        }
+        
+        .recipe-card.heavy-cutter .recipe-icon {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .recipe-card.advanced .recipe-icon {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+        }
+        
+        .recipe-card.legendary .recipe-icon {
+            background: linear-gradient(135deg, #fd7e14, #ffc107);
+        }
+        
+        .recipe-name {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .recipe-quantity {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-teal);
+            min-width: 60px;
+            text-align: center;
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .recipe-materials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .material-req {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--light-gray);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+        
+        .material-req .material-icon {
+            width: 24px;
+            height: 24px;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+        
+        .material-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .material-icon.recyclable {
+            background: var(--gradient-primary);
+        }
+        
+        .material-icon.titanium {
+            background: linear-gradient(135deg, #6c757d, #adb5bd);
+        }
+        
+        .material-icon.aluminum {
+            background: linear-gradient(135deg, #dee2e6, #f8f9fa);
+            color: var(--dark-gray);
+        }
+        
+        .material-icon.steel {
+            background: linear-gradient(135deg, #495057, #6c757d);
+        }
+        
+        .material-icon.plastic {
+            background: linear-gradient(135deg, #17a2b8, #20c997);
+        }
+        
+        /* Cost Breakdown */
+        .cost-breakdown {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .cost-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--beeker-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .cost-detail {
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+            line-height: 1.4;
+        }
+        
+        .cost-detail span {
+            background: var(--white);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .cost-detail strong {
+            color: var(--beeker-green);
+            font-weight: 700;
+        }
+        
+        /* Employee Hub */
+        .employee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .employee-card {
+            background: var(--white);
+            border: 1px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .employee-card:hover {
+            border-color: var(--primary-teal);
+            box-shadow: var(--shadow);
+        }
+        
+        .employee-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .employee-rank {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .rank-owner {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #8b6914;
+        }
+        
+        .rank-head-mechanic {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: var(--white);
+        }
+        
+        .employee-rank[class*="senior"] {
+            background: var(--beeker-green) !important;
+            color: var(--white) !important;
+        }
+        
+        .rank-senior-mechanic {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+        
+        .rank-mechanic {
+            background: linear-gradient(135deg, #6c757d, #868e96);
+            color: var(--white);
+        }
+        
+        .rank-trial-mechanic {
+            background: linear-gradient(135deg, #fd7e14, #ffc107);
+            color: var(--white);
+        }
+        
+        .rank-towie {
+            background: linear-gradient(135deg, var(--medium-gray), var(--light-gray));
+            color: var(--dark-gray);
+        }
+        
+        /* Search and Filter */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--beeker-green);
+        }
+        
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--beeker-green);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+            
+            .nav-tabs {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-tab {
+                flex: 1;
+                text-align: center;
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .craft-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recipe-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .inventory-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .totals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .employee-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-input {
+                min-width: unset;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active {
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Beeker's Garage & Parts Logo" style="display: none;" />
+                <div style="background: #2d5016; padding: 1rem 2rem; border-radius: 12px; border: 3px solid #dc2626; position: relative;">
+                    <div style="color: white; font-family: serif; font-size: 2rem; font-style: italic; text-align: center; margin-bottom: 0.25rem;">Beeker's</div>
+                    <div style="color: white; font-family: sans-serif; font-size: 1.5rem; font-weight: bold; letter-spacing: 3px; text-align: center; margin-bottom: 0.25rem;">GARAGE</div>
+                    <div style="color: #dc2626; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; letter-spacing: 2px; text-align: center;">&amp; PARTS</div>
+                    <!-- Red accent lines -->
+                    <div style="position: absolute; top: 8px; left: 8px; right: 8px; height: 3px; background: #dc2626; border-radius: 2px;"></div>
+                    <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; height: 3px; background: #dc2626; border-radius: 2px;"></div>
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab" onclick="showPage('calculator')">Crafting Calculator</button>
+                <button class="nav-tab active" onclick="showPage('invoice')">Invoice Calculator</button>
+                <button class="nav-tab" onclick="showPage('employees')">Employee Hub</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Crafting Calculator Page -->
+        <div id="calculator" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🔧</div>
+                    <h1 class="card-title">Crafting Planner</h1>
+                </div>
+
+                <div class="recipe-grid">
+                    <!-- Scrap Recipe -->
+                    <div class="recipe-card">
+                        <div class="recipe-header">
+                            <div class="recipe-icon">
+                                <img src="https://i.imgur.com/UYd5yVq.png" alt="Scrap" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="recipe-name">Scrap</div>
+                            <input type="number" class="recipe-input" id="scrap-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
+                        </div>
+                        <div class="recipe-materials">
+                            <div class="material-req">
+                                <span class="material-icon recyclable">♻️</span>
+                                <span>3 Recyclable Each</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Large Repair Kit Recipe -->
+                    <div class="recipe-card repair-kit">
+                        <div class="recipe-header">
+                            <div class="recipe-icon">
+                                <img src="https://i.imgur.com/q9Tpbd3.png" alt="Repair Kit" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="recipe-name">Large Repair Kit</div>
+                            <input type="number" class="recipe-input" id="repair-kit-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
+                        </div>
+                        <div class="recipe-materials">
+                            <div class="material-req">
+                                <span class="material-icon recyclable">♻️</span>
+                                <span>90 Recyclable</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon electronics">⚡</span>
+                                <span>6 Electronics</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon steel">⚙️</span>
+                                <span>30 Steel</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon wire">🔌</span>
+                                <span>24 Wire</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon glass">💎</span>
+                                <span>21 Glass</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon rubber">⚫</span>
+                                <span>9 Rubber</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Heavy Cutter Recipe -->
+                    <div class="recipe-card heavy-cutter">
+                        <div class="recipe-header">
+                            <div class="recipe-icon">
+                                <img src="https://i.imgur.com/bdnTrGE.png" alt="Heavy Cutters" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="recipe-name">Heavy Cutter</div>
+                            <input type="number" class="recipe-input" id="heavy-cutter-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
+                        </div>
+                        <div class="recipe-materials">
+                            <div class="material-req">
+                                <span class="material-icon recyclable">♻️</span>
+                                <span>120 Recyclable</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon titanium">🔩</span>
+                                <span>2 Titanium</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon steel">⚙️</span>
+                                <span>24 Steel</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon">🗑️</span>
+                                <span>75 Scrap</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon rubber">⚫</span>
+                                <span>21 Rubber</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Lockpick Recipe -->
+                    <div class="recipe-card advanced">
+                        <div class="recipe-header">
+                            <div class="recipe-icon">
+                                <img src="https://i.imgur.com/Xq2pWH2.png" alt="Advanced Lockpick" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="recipe-name">Advanced Lockpick</div>
+                            <input type="number" class="recipe-input" id="lockpick-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
+                        </div>
+                        <div class="recipe-materials">
+                            <div class="material-req">
+                                <span class="material-icon recyclable">♻️</span>
+                                <span>180 Recyclable</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon aluminum">🔘</span>
+                                <span>60 Aluminum</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon">🗑️</span>
+                                <span>60 Scrap</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon plastic">🧊</span>
+                                <span>60 Plastic</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manhole Remover Recipe -->
+                    <div class="recipe-card legendary">
+                        <div class="recipe-header">
+                            <div class="recipe-icon">
+                                <img src="https://i.imgur.com/Eyu0kJq.png" alt="Manhole Remover" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div class="recipe-name">Manhole Remover</div>
+                            <input type="number" class="recipe-input" id="manhole-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
+                        </div>
+                        <div class="recipe-materials">
+                            <div class="material-req">
+                                <span class="material-icon recyclable">♻️</span>
+                                <span>300 Recyclable</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon titanium">🔩</span>
+                                <span>10 Titanium</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon">🗑️</span>
+                                <span>45 Scrap</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon aluminum">🔘</span>
+                                <span>150 Aluminum</span>
+                            </div>
+                            <div class="material-req">
+                                <span class="material-icon steel">⚙️</span>
+                                <span>105 Steel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Materials Needed -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📋</div>
+                    <h1 class="card-title">Total Materials Needed</h1>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #e3f2fd, #f8f9fa); border: 2px solid #2196f3; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2196f3, #1976d2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">💡</div>
+                        <h3 style="color: #1565c0; margin: 0; font-size: 1.1rem; font-weight: 600;">Recycling Center Guide</h3>
+                    </div>
+                    <p style="margin: 0; color: #424242; line-height: 1.5;">The quantities shown below are what you enter into the laptop at the recycling center for each material type.</p>
+                </div>
+                
+                <div class="totals-grid">
+                    <div class="total-item">
+                        <div class="total-icon recyclable">♻️</div>
+                        <div class="total-name">Recyclable Materials</div>
+                        <div class="total-quantity" id="total-recyclables">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon electronics">⚡</div>
+                        <div class="total-name">Electronics</div>
+                        <div class="total-quantity" id="total-electronics">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon steel">⚙️</div>
+                        <div class="total-name">Steel</div>
+                        <div class="total-quantity" id="total-steel">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon wire">🔌</div>
+                        <div class="total-name">Wire</div>
+                        <div class="total-quantity" id="total-wire">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon glass">💎</div>
+                        <div class="total-name">Glass</div>
+                        <div class="total-quantity" id="total-glass">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon rubber">⚫</div>
+                        <div class="total-name">Rubber</div>
+                        <div class="total-quantity" id="total-rubber">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon">🗑️</div>
+                        <div class="total-name">Scrap</div>
+                        <div class="total-quantity" id="total-scrap">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon titanium">🔩</div>
+                        <div class="total-name">Titanium</div>
+                        <div class="total-quantity" id="total-titanium">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon aluminum">🔘</div>
+                        <div class="total-name">Aluminum</div>
+                        <div class="total-quantity" id="total-aluminum">0</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-icon plastic">🧊</div>
+                        <div class="total-name">Plastic</div>
+                        <div class="total-quantity" id="total-plastic">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Calculator Page -->
+        <div id="invoice" class="page active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🧾</div>
+                    <h1 class="card-title">Service Invoice Calculator</h1>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+                    <!-- Service Input -->
+                    <div>
+                        <div style="background: linear-gradient(135deg, #e3f2fd, #f8f9fa); border: 2px solid #2196f3; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                            <h3 style="color: #1565c0; margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600;">Add Service</h3>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Service Type</label>
+                                <select id="service-type" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" onchange="togglePriceInput()">
+                                    <option value="">Select Service</option>
+                                    <option value="car-upgrades">Car Upgrades</option>
+                                    <option value="degradation">Degradation</option>
+                                </select>
+                            </div>
+
+                            <div id="stock-price-section" style="margin-bottom: 1rem; display: none;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Stock Price ($)</label>
+                                <input type="number" id="stock-price" placeholder="Enter stock price" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" oninput="calculateUpgradePrice()" onkeypress="handleEnterKey(event, 'car-upgrades')" min="0" step="0.01">
+                                <div id="upgrade-price" style="margin-top: 0.5rem; padding: 0.5rem; background: #e8f5e8; border-radius: 6px; font-weight: 600; color: #2d5016; display: none;">
+                                    Invoice Price: $<span id="upgrade-amount">0</span>
+                                </div>
+                            </div>
+
+                            <div id="scrap-amount-section" style="margin-bottom: 1rem; display: none;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Scrap Required</label>
+                                <input type="number" id="scrap-amount" placeholder="Enter scrap amount" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" oninput="calculateDegradationPrice()" onkeypress="handleEnterKey(event, 'degradation')" min="0">
+                                <div id="degradation-price" style="margin-top: 0.5rem; padding: 0.5rem; background: #fff3cd; border-radius: 6px; font-weight: 600; color: #856404; display: none;">
+                                    Invoice Price: $<span id="degradation-amount">0</span>
+                                </div>
+                            </div>
+
+                            <button onclick="addServiceToInvoice()" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #4a7c2a, #2d5016); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                                Add to Invoice
+                            </button>
+                        </div>
+
+                        <!-- Quick Service Buttons -->
+                        <div style="background: var(--light-gray); border-radius: 12px; padding: 1.5rem;">
+                            <h4 style="margin: 0 0 1rem 0; color: var(--beeker-green); font-weight: 600;">Quick Add Items</h4>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Quantity</label>
+                                <input type="number" id="quick-quantity" value="1" min="1" style="width: 100px; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1rem; text-align: center;">
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <button onclick="addQuickItemWithQuantity('Repair Kit', 600)" style="padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Repair Kit - $600</button>
+                                <button onclick="addQuickItemWithQuantity('Advanced Lockpick', 1250)" style="padding: 0.75rem; background: #6f42c1; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Advanced Lockpick - $1,250</button>
+                                <button onclick="addQuickItemWithQuantity('Heavy Cutters', 700)" style="padding: 0.75rem; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Heavy Cutters - $700</button>
+                                <button onclick="addQuickItemWithQuantity('Manhole Remover', 3000)" style="padding: 0.75rem; background: #fd7e14; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Manhole Remover - $3,000</button>
+                                <button onclick="addQuickItemWithQuantity('Lithium', 50)" style="padding: 0.75rem; background: #17a2b8; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Lithium - $50</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Display -->
+                    <div>
+                        <div style="background: var(--white); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-gray);">
+                                <h3 style="color: var(--beeker-green); margin: 0; font-size: 1.2rem; font-weight: 700;">INVOICE</h3>
+                                <button onclick="clearInvoice()" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; cursor: pointer;">Clear All</button>
+                            </div>
+                            
+                            <div id="invoice-items" style="min-height: 200px;">
+                                <div style="text-align: center; color: #666; padding: 2rem; font-style: italic;">
+                                    No items in invoice
+                                </div>
+                            </div>
+
+                            <div style="border-top: 2px solid var(--beeker-green); padding-top: 1rem; margin-top: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 700; color: var(--beeker-green);">
+                                    <span>TOTAL:</span>
+                                    <span id="invoice-total">$0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Free Repair Counter -->
+                        <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <div style="width: 32px; height: 32px; background: var(--beeker-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: white;">🔧</div>
+                                    <span style="font-weight: 600; color: var(--beeker-green); font-size: 1.1rem;">Free Repairs Available:</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <button id="repair-down" style="width: 32px; height: 32px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; user-select: none;" onmousedown="startDecrementing()" onmouseup="stopAdjusting()" onmouseleave="stopAdjusting()" ontouchstart="startDecrementing()" ontouchend="stopAdjusting()">▼</button>
+                                    <input type="number" id="repair-counter" value="0" min="0" style="font-size: 1.5rem; font-weight: 700; color: var(--beeker-green); width: 80px; text-align: center; background: white; border: 2px solid var(--beeker-green); border-radius: 6px; padding: 0.25rem 0.5rem; -moz-appearance: textfield;" oninput="updateRepairCounterFromInput()">
+                                    <button id="repair-up" style="width: 32px; height: 32px; background: var(--beeker-green); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; user-select: none;" onmousedown="startIncrementing()" onmouseup="stopAdjusting()" onmouseleave="stopAdjusting()" ontouchstart="startIncrementing()" ontouchend="stopAdjusting()">▲</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employee Hub Page -->
+        <div id="employees" class="page">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <h1 class="card-title">Employee Directory</h1>
+                </div>
+
+                <!-- Staff Summary Bar -->
+                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem; font-weight: 700; color: var(--beeker-green);">38</div>
+                            <div style="font-size: 0.9rem; color: #666; font-weight: 500;">Total Staff</div>
+                        </div>
+                        <div style="height: 40px; width: 2px; background: var(--medium-gray);"></div>
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ffed4e);"></div>
+                                <span style="font-weight: 600; color: #8b6914;">1 Owner</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #e83e8c);"></div>
+                                <span style="font-weight: 600; color: #6f42c1;">5 Head Mechanics</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--beeker-green);"></div>
+                                <span style="font-weight: 600; color: var(--beeker-green);">10 Senior Mechanics</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #6c757d, #868e96);"></div>
+                                <span style="font-weight: 600; color: #6c757d;">22 Mechanics</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-employees">38</div>
+                        <div class="stat-label">Total Employees</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="head-mechanics-count">5</div>
+                        <div class="stat-label">Head Mechanics</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="senior-count">10</div>
+                        <div class="stat-label">Senior Mechanics</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="mechanic-count">22</div>
+                        <div class="stat-label">Mechanics</div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <input type="text" class="search-input" id="employee-search" placeholder="Search employees..." oninput="filterEmployees()">
+                    <select class="filter-select" id="rank-filter" onchange="filterEmployees()">
+                        <option value="">All Ranks</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Head Mechanic">Head Mechanic</option>
+                        <option value="Senior Mechanic">Senior Mechanic</option>
+                        <option value="Mechanic">Mechanic</option>
+                        <option value="Trial Mechanic">Trial Mechanic</option>
+                        <option value="Towie">Towie</option>
+                    </select>
+                </div>
+
+                <div class="employee-grid" id="employee-grid">
+                    <!-- Employees will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Employee data with correct ranks
+        const employees = [
+            // Owner
+            { name: "Marvin Rodicinal", rank: "Owner" },
+            
+            // Head Mechanic
+            { name: "Ali Monky", rank: "Head Mechanic" },
+            { name: "JP Purp", rank: "Head Mechanic" },
+            { name: "Rod Purp", rank: "Head Mechanic" },
+            { name: "Doom Dollas", rank: "Head Mechanic" },
+            { name: "Santos Dollas", rank: "Head Mechanic" },
+            
+            // Senior Mechanic
+            { name: "Licked Behave", rank: "Senior Mechanic" },
+            { name: "Anita Fajita", rank: "Senior Mechanic" },
+            { name: "Carlito Jarito", rank: "Senior Mechanic" },
+            { name: "David Brooks", rank: "Senior Mechanic" },
+            { name: "Dec Behave", rank: "Senior Mechanic" },
+            { name: "Donnie Blaze", rank: "Senior Mechanic" },
+            { name: "Leo Broderick", rank: "Senior Mechanic" },
+            { name: "Luie Lemmon", rank: "Senior Mechanic" },
+            { name: "Samantha Bellum", rank: "Senior Mechanic" },
+            { name: "Ben RizzoKraves", rank: "Senior Mechanic" },
+            
+            // Mechanic (everyone else including former trials)
+            { name: "Amanda Tess", rank: "Mechanic" },
+            { name: "Benjamin Dejo", rank: "Mechanic" },
+            { name: "Big Red", rank: "Mechanic" },
+            { name: "Caleb Garcia", rank: "Mechanic" },
+            { name: "Clyde Foster", rank: "Mechanic" },
+            { name: "Erik Menendez", rank: "Mechanic" },
+            { name: "James Edmonton", rank: "Mechanic" },
+            { name: "Jimmy Earnhardt", rank: "Mechanic" },
+            { name: "Joshua Tess", rank: "Mechanic" },
+            { name: "Jovan Behavovich", rank: "Mechanic" },
+            { name: "Kain Garcia", rank: "Mechanic" },
+            { name: "Maverick Mitchell", rank: "Mechanic" },
+            { name: "Pablo Garcia", rank: "Mechanic" },
+            { name: "Rainer Behave", rank: "Mechanic" },
+            { name: "Sanity Nix", rank: "Mechanic" },
+            { name: "Tonih Blaze", rank: "Mechanic" },
+            { name: "Bird Cortair", rank: "Mechanic" },
+            { name: "Amir VuittonTrainor", rank: "Mechanic" },
+            { name: "Dean VuittonTrainor", rank: "Mechanic" },
+            { name: "Joe Miller", rank: "Mechanic" },
+            { name: "Sofia Rizzo", rank: "Mechanic" },
+            { name: "Delilah Moon", rank: "Mechanic" }
+        ];
+
+        // Invoice Calculator Functions
+        let invoiceItems = [];
+        let invoiceCounter = 1;
+        let repairCounter = 0;
+        let adjustInterval = null;
+        let adjustTimeout = null;
+
+        // Free Repair Counter Functions
+        function startIncrementing() {
+            incrementRepairCounter();
+            adjustTimeout = setTimeout(() => {
+                adjustInterval = setInterval(incrementRepairCounter, 100);
+            }, 500); // Start fast increment after 500ms hold
+        }
+
+        function startDecrementing() {
+            decrementRepairCounter();
+            adjustTimeout = setTimeout(() => {
+                adjustInterval = setInterval(decrementRepairCounter, 100);
+            }, 500); // Start fast decrement after 500ms hold
+        }
+
+        function stopAdjusting() {
+            clearTimeout(adjustTimeout);
+            clearInterval(adjustInterval);
+            adjustTimeout = null;
+            adjustInterval = null;
+        }
+
+        function incrementRepairCounter() {
+            repairCounter++;
+            document.getElementById('repair-counter').value = repairCounter;
+        }
+
+        function decrementRepairCounter() {
+            if (repairCounter > 0) {
+                repairCounter--;
+                document.getElementById('repair-counter').value = repairCounter;
+            }
+        }
+
+        function updateRepairCounterFromInput() {
+            const input = document.getElementById('repair-counter');
+            const value = parseInt(input.value) || 0;
+            repairCounter = Math.max(0, value); // Ensure it's not negative
+            input.value = repairCounter; // Update display in case user entered negative
+        }
+
+        function handleEnterKey(event, serviceType) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addServiceToInvoice();
+            }
+        }
+
+        function togglePriceInput() {
+            const serviceType = document.getElementById('service-type').value;
+            const stockSection = document.getElementById('stock-price-section');
+            const scrapSection = document.getElementById('scrap-amount-section');
+            
+            // Hide both sections first
+            stockSection.style.display = 'none';
+            scrapSection.style.display = 'none';
+            document.getElementById('upgrade-price').style.display = 'none';
+            document.getElementById('degradation-price').style.display = 'none';
+            
+            // Show relevant section
+            if (serviceType === 'car-upgrades') {
+                stockSection.style.display = 'block';
+            } else if (serviceType === 'degradation') {
+                scrapSection.style.display = 'block';
+            }
+            
+            // Clear inputs
+            document.getElementById('stock-price').value = '';
+            document.getElementById('scrap-amount').value = '';
+        }
+
+        function calculateUpgradePrice() {
+            const stockPrice = parseFloat(document.getElementById('stock-price').value) || 0;
+            const invoicePrice = stockPrice * 1.5;
+            
+            document.getElementById('upgrade-amount').textContent = invoicePrice.toFixed(2);
+            document.getElementById('upgrade-price').style.display = stockPrice > 0 ? 'block' : 'none';
+        }
+
+        function calculateDegradationPrice() {
+            const scrapAmount = parseInt(document.getElementById('scrap-amount').value) || 0;
+            const invoicePrice = scrapAmount * 40;
+            
+            document.getElementById('degradation-amount').textContent = invoicePrice.toFixed(2);
+            document.getElementById('degradation-price').style.display = scrapAmount > 0 ? 'block' : 'none';
+        }
+
+        function addServiceToInvoice() {
+            const serviceType = document.getElementById('service-type').value;
+            
+            if (!serviceType) {
+                alert('Please select a service type');
+                return;
+            }
+            
+            let serviceName = '';
+            let price = 0;
+            let description = '';
+            
+            if (serviceType === 'car-upgrades') {
+                const stockPrice = parseFloat(document.getElementById('stock-price').value);
+                if (!stockPrice || stockPrice <= 0) {
+                    alert('Please enter a valid stock price');
+                    return;
+                }
+                
+                serviceName = 'Car Upgrade';
+                price = stockPrice * 1.5;
+                description = `Stock Price: ${stockPrice.toFixed(2)} × 1.5`;
+                
+            } else if (serviceType === 'degradation') {
+                const scrapAmount = parseInt(document.getElementById('scrap-amount').value);
+                if (!scrapAmount || scrapAmount <= 0) {
+                    alert('Please enter a valid scrap amount');
+                    return;
+                }
+                
+                serviceName = 'Degradation Repair';
+                price = scrapAmount * 40;
+                description = `${scrapAmount} Scrap × $40`;
+            }
+            
+            // Add to invoice
+            const item = {
+                id: invoiceCounter++,
+                name: serviceName,
+                description: description,
+                price: price
+            };
+            
+            invoiceItems.push(item);
+            updateInvoiceDisplay();
+            
+            // Clear form
+            document.getElementById('service-type').value = '';
+            document.getElementById('stock-price').value = '';
+            document.getElementById('scrap-amount').value = '';
+            togglePriceInput();
+        }
+
+        function addQuickItemWithQuantity(itemName, unitPrice) {
+            const quantity = parseInt(document.getElementById('quick-quantity').value) || 1;
+            const totalPrice = unitPrice * quantity;
+            
+            const item = {
+                id: invoiceCounter++,
+                name: quantity > 1 ? `${itemName} (x${quantity})` : itemName,
+                description: quantity > 1 ? `${unitPrice} × ${quantity}` : 'Standard Rate',
+                price: totalPrice
+            };
+            
+            invoiceItems.push(item);
+            updateInvoiceDisplay();
+        }
+
+        function addQuickItem(itemName, price) {
+            // Check if item already exists in invoice
+            const existingItem = invoiceItems.find(item => item.baseItemName === itemName);
+            
+            if (existingItem) {
+                // Update existing item
+                existingItem.quantity += 1;
+                existingItem.price = existingItem.unitPrice * existingItem.quantity;
+                existingItem.name = existingItem.quantity > 1 ? `${itemName} (x${existingItem.quantity})` : itemName;
+                existingItem.description = existingItem.quantity > 1 ? `${existingItem.unitPrice} × ${existingItem.quantity}` : 'Standard Rate';
+            } else {
+                // Create new item
+                const item = {
+                    id: invoiceCounter++,
+                    baseItemName: itemName,
+                    name: itemName,
+                    description: 'Standard Rate',
+                    price: price,
+                    unitPrice: price,
+                    quantity: 1
+                };
+                invoiceItems.push(item);
+            }
+            
+            updateInvoiceDisplay();
+        }
+
+        function removeInvoiceItem(itemId) {
+            invoiceItems = invoiceItems.filter(item => item.id !== itemId);
+            updateInvoiceDisplay();
+        }
+
+        function updateInvoiceDisplay() {
+            const container = document.getElementById('invoice-items');
+            
+            if (invoiceItems.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #666; padding: 2rem; font-style: italic;">No items in invoice</div>';
+                document.getElementById('invoice-total').textContent = '$0';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            invoiceItems.forEach(item => {
+                total += item.price;
+                html += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--light-gray); border-radius: 8px; margin-bottom: 0.75rem;">
+                        <div>
+                            <div style="font-weight: 600; color: var(--beeker-green);">${item.name}</div>
+                            <div style="font-size: 0.9rem; color: #666;">${item.description}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span style="font-weight: 700; font-size: 1.1rem;">${item.price.toFixed(2)}</span>
+                            <button onclick="removeInvoiceItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('invoice-total').textContent = `${total.toFixed(2)}`;
+        }
+
+        function clearInvoice() {
+            invoiceItems = [];
+            updateInvoiceDisplay();
+        }
+
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Activate corresponding nav tab
+            event.target.classList.add('active');
+        }
+
+        // Crafting Calculator - New Planning System
+        function calculateTotalMaterials() {
+            // Get quantities wanted
+            const scrapQty = parseInt(document.getElementById('scrap-input').value) || 0;
+            const repairKitQty = parseInt(document.getElementById('repair-kit-input').value) || 0;
+            const heavyCutterQty = parseInt(document.getElementById('heavy-cutter-input').value) || 0;
+            const lockpickQty = parseInt(document.getElementById('lockpick-input').value) || 0;
+            const manholeQty = parseInt(document.getElementById('manhole-input').value) || 0;
+            
+            // Calculate total materials needed
+            let totalRecyclables = 0;
+            let totalElectronics = 0;
+            let totalSteel = 0;
+            let totalWire = 0;
+            let totalGlass = 0;
+            let totalRubber = 0;
+            let totalScrap = 0;
+            let totalTitanium = 0;
+            let totalAluminum = 0;
+            let totalPlastic = 0;
+            
+            // Scrap: 3 recyclables each
+            totalRecyclables += scrapQty * 3;
+            
+            // Large Repair Kit: 90 recyclables + 6 electronics + 30 steel + 24 wire + 21 glass + 9 rubber
+            totalRecyclables += repairKitQty * 90;
+            totalElectronics += repairKitQty * 6;
+            totalSteel += repairKitQty * 30;
+            totalWire += repairKitQty * 24;
+            totalGlass += repairKitQty * 21;
+            totalRubber += repairKitQty * 9;
+            
+            // Heavy Cutter: 2 titanium + 24 steel + 75 scrap + 21 rubber (totals 120 recyclables worth)
+            totalTitanium += heavyCutterQty * 2;
+            totalSteel += heavyCutterQty * 24;
+            totalScrap += heavyCutterQty * 75;
+            totalRubber += heavyCutterQty * 21;
+            // Total recyclable cost is 120 per heavy cutter
+            totalRecyclables += heavyCutterQty * 120;
+            
+            // Advanced Lockpick: 180 recyclables + 60 aluminum + 60 scrap + 60 plastic
+            totalRecyclables += lockpickQty * 180;
+            totalAluminum += lockpickQty * 60;
+            totalScrap += lockpickQty * 60;
+            totalPlastic += lockpickQty * 60;
+            
+            // Manhole Remover: 300 recyclables + 10 titanium + 45 scrap + 150 aluminum + 105 steel
+            totalRecyclables += manholeQty * 300;
+            totalTitanium += manholeQty * 10;
+            totalScrap += manholeQty * 45;
+            totalAluminum += manholeQty * 150;
+            totalSteel += manholeQty * 105;
+            
+            // Update display
+            document.getElementById('total-recyclables').textContent = totalRecyclables;
+            document.getElementById('total-electronics').textContent = totalElectronics;
+            document.getElementById('total-steel').textContent = totalSteel;
+            document.getElementById('total-wire').textContent = totalWire;
+            document.getElementById('total-glass').textContent = totalGlass;
+            document.getElementById('total-rubber').textContent = totalRubber;
+            document.getElementById('total-scrap').textContent = totalScrap;
+            document.getElementById('total-titanium').textContent = totalTitanium;
+            document.getElementById('total-aluminum').textContent = totalAluminum;
+            document.getElementById('total-plastic').textContent = totalPlastic;
+        }
+
+        // Employee Management
+        function renderEmployees(employeesToRender = employees) {
+            const grid = document.getElementById('employee-grid');
+            grid.innerHTML = '';
+            
+            employeesToRender.forEach(employee => {
+                const card = document.createElement('div');
+                card.className = 'employee-card';
+                
+                const rankClass = employee.rank.toLowerCase().replace(/\s+/g, '-');
+                
+                card.innerHTML = `
+                    <div class="employee-name">${employee.name}</div>
+                    <span class="employee-rank rank-${rankClass}">${employee.rank}</span>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function filterEmployees() {
+            const searchTerm = document.getElementById('employee-search').value.toLowerCase();
+            const rankFilter = document.getElementById('rank-filter').value;
+            
+            let filtered = employees.filter(employee => {
+                const matchesSearch = employee.name.toLowerCase().includes(searchTerm);
+                const matchesRank = !rankFilter || employee.rank === rankFilter;
+                return matchesSearch && matchesRank;
+            });
+            
+            renderEmployees(filtered);
+        }
+
+        function updateStats() {
+            const ranks = employees.reduce((acc, emp) => {
+                acc[emp.rank] = (acc[emp.rank] || 0) + 1;
+                return acc;
+            }, {});
+            
+            document.getElementById('total-employees').textContent = employees.length;
+            document.getElementById('head-mechanics-count').textContent = ranks['Head Mechanic'] || 0;
+            document.getElementById('senior-count').textContent = ranks['Senior Mechanic'] || 0;
+            document.getElementById('mechanic-count').textContent = ranks['Mechanic'] || 0;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotalMaterials();
+            renderEmployees();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
