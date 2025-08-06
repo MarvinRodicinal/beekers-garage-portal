@@ -1162,6 +1162,34 @@
         let adjustInterval = null;
         let adjustTimeout = null;
 
+        // Load data from localStorage on page load
+        function loadSavedData() {
+            const savedInvoice = localStorage.getItem('beekers-invoice');
+            const savedCounter = localStorage.getItem('beekers-counter');
+            const savedInvoiceCounter = localStorage.getItem('beekers-invoice-counter');
+            
+            if (savedInvoice) {
+                invoiceItems = JSON.parse(savedInvoice);
+                updateInvoiceDisplay();
+            }
+            
+            if (savedCounter) {
+                repairCounter = parseInt(savedCounter);
+                document.getElementById('repair-counter').value = repairCounter;
+            }
+            
+            if (savedInvoiceCounter) {
+                invoiceCounter = parseInt(savedInvoiceCounter);
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('beekers-invoice', JSON.stringify(invoiceItems));
+            localStorage.setItem('beekers-counter', repairCounter.toString());
+            localStorage.setItem('beekers-invoice-counter', invoiceCounter.toString());
+        }
+
         // Free Repair Counter Functions
         function startIncrementing() {
             incrementRepairCounter();
@@ -1187,12 +1215,14 @@
         function incrementRepairCounter() {
             repairCounter++;
             document.getElementById('repair-counter').value = repairCounter;
+            saveData();
         }
 
         function decrementRepairCounter() {
             if (repairCounter > 0) {
                 repairCounter--;
                 document.getElementById('repair-counter').value = repairCounter;
+                saveData();
             }
         }
 
@@ -1201,6 +1231,7 @@
             const value = parseInt(input.value) || 0;
             repairCounter = Math.max(0, value); // Ensure it's not negative
             input.value = repairCounter; // Update display in case user entered negative
+            saveData();
         }
 
         function handleEnterKey(event, serviceType) {
@@ -1294,6 +1325,7 @@
             
             invoiceItems.push(item);
             updateInvoiceDisplay();
+            saveData();
             
             // Clear form
             document.getElementById('service-type').value = '';
@@ -1315,6 +1347,7 @@
             
             invoiceItems.push(item);
             updateInvoiceDisplay();
+            saveData();
         }
 
         function addQuickItem(itemName, price) {
@@ -1347,6 +1380,7 @@
         function removeInvoiceItem(itemId) {
             invoiceItems = invoiceItems.filter(item => item.id !== itemId);
             updateInvoiceDisplay();
+            saveData();
         }
 
         function updateInvoiceDisplay() {
@@ -1384,6 +1418,7 @@
         function clearInvoice() {
             invoiceItems = [];
             updateInvoiceDisplay();
+            saveData();
         }
 
         // Page Navigation
@@ -1518,6 +1553,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData(); // Load saved data first
             calculateTotalMaterials();
             renderEmployees();
             updateStats();
