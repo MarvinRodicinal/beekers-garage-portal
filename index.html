@@ -442,6 +442,16 @@
                     <span class="active-dot"></span><span id="active-badge-name"></span>
                 </span>
             </div>
+
+            <!-- Partnership Discount -->
+            <div style="display:flex;align-items:center;gap:0.75rem;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;padding:0.75rem 1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                <label style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;">Partnership</label>
+                <select id="partnership-select" onchange="updatePartnership()" style="flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.9rem;padding:0.3rem 0.5rem;">
+                    <option value="">— No discount —</option>
+                    <option value="Up-N-Atom">🤝 Up-N-Atom (1.25×)</option>
+                </select>
+                <span id="partnership-badge" style="display:none;background:#1e3a5f;border:1px solid #3b82f6;border-radius:4px;padding:0.2rem 0.6rem;font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:#93c5fd;white-space:nowrap;"></span>
+            </div>
             <div class="panel">
                 <div class="panel-title">Add Service</div>
                 <div class="field-group">
@@ -877,6 +887,27 @@ function updateActiveMechanic(doSave=true) {
     if(doSave) save();
 }
 
+/* ── PARTNERSHIPS ── */
+const PARTNERSHIPS = {
+    'Up-N-Atom': { multiplier: 1.25, label: 'Up-N-Atom Discount' }
+    // Add more here: 'PartnerName': { multiplier: X.XX, label: 'Display Label' }
+};
+let activePartnership = '';
+
+function updatePartnership() {
+    activePartnership = document.getElementById('partnership-select').value;
+    const badge = document.getElementById('partnership-badge');
+    if(activePartnership && PARTNERSHIPS[activePartnership]) {
+        const p = PARTNERSHIPS[activePartnership];
+        badge.style.display = 'inline-flex';
+        badge.textContent = `🤝 ${activePartnership} — ${p.multiplier}× on upgrades`;
+    } else {
+        badge.style.display = 'none';
+    }
+    // Recalculate preview if upgrade price is showing
+    calcUpgrade();
+}
+
 /* ── INVOICE ── */
 function togglePriceInput() {
     const t=document.getElementById('service-type').value;
@@ -887,7 +918,17 @@ function togglePriceInput() {
     ['repair-materials','stock-price','scrap-amount'].forEach(id=>document.getElementById(id).value='');
 }
 function calcRepair(){const m=n('repair-materials'),el=document.getElementById('repair-price');if(m>0){document.getElementById('repair-amount').textContent=(m*10+100).toFixed(2);el.style.display='block';}else el.style.display='none';}
-function calcUpgrade(){const s=parseFloat(document.getElementById('stock-price').value)||0,el=document.getElementById('upgrade-price');if(s>0){document.getElementById('upgrade-amount').textContent=(s*1.5).toFixed(2);el.style.display='block';}else el.style.display='none';}
+function calcUpgrade(){
+    const s=parseFloat(document.getElementById('stock-price').value)||0;
+    const el=document.getElementById('upgrade-price');
+    if(s>0){
+        const mult = (activePartnership && PARTNERSHIPS[activePartnership]) ? PARTNERSHIPS[activePartnership].multiplier : 1.5;
+        const total = s * mult;
+        const partnerNote = (activePartnership && mult < 1.5) ? ` <span style="color:#93c5fd">(${activePartnership} ${mult}×)</span>` : '';
+        el.innerHTML = `Invoice → $<span id="upgrade-amount">${total.toFixed(2)}</span>${partnerNote}`;
+        el.style.display='block';
+    } else { el.style.display='none'; }
+}
 function calcDegradation(){const s=n('scrap-amount'),el=document.getElementById('degradation-price');if(s>0){document.getElementById('degradation-amount').textContent=(s*40).toFixed(2);el.style.display='block';}else el.style.display='none';}
 function enterAdd(e){if(e.key==='Enter')addService();}
 
@@ -900,8 +941,15 @@ function addService() {
         name='Car Repair'; price=m*10+100; desc=`${m} materials × $10 + $100 flat fee`;
     } else if(t==='car-upgrades'){
         const s=parseFloat(document.getElementById('stock-price').value); if(!s||s<=0) return alert('Enter a valid stock price.');
-        name='Car Upgrade'; price=s*1.5; desc=`Stock $${s.toFixed(2)} × 1.5`;
-        const item={id:invoiceCounter++,name,desc,price,serviceType:t,stockPrice:s,ts:Date.now()};
+        const mult = (activePartnership && PARTNERSHIPS[activePartnership]) ? PARTNERSHIPS[activePartnership].multiplier : 1.5;
+        const fullPrice = s * 1.5;
+        const discountedPrice = s * mult;
+        const discountAmt = fullPrice - discountedPrice;
+        name='Car Upgrade'; price=discountedPrice;
+        desc = activePartnership
+            ? `Stock $${s.toFixed(2)} × ${mult} (${activePartnership} — saved $${discountAmt.toFixed(2)})`
+            : `Stock $${s.toFixed(2)} × 1.5`;
+        const item={id:invoiceCounter++,name,desc,price,serviceType:t,stockPrice:s,partnership:activePartnership||null,ts:Date.now()};
         invoiceItems.push(item);
         renderInvoice(); save();
         document.getElementById('service-type').value='';
@@ -1176,6 +1224,16 @@ function clearAllProfits() {
     });
 }
 
+function removeEmpInvoice(name, idx) {
+    showConfirm('Remove Invoice', `Remove this invoice from ${name}'s history? This cannot be undone.`, () => {
+        if(empInvoices[name]) {
+            empInvoices[name].splice(idx, 1);
+            if(empInvoices[name].length === 0) delete empInvoices[name];
+        }
+        save(); renderRevenue(); renderProfits();
+    });
+}
+
 function payIndividual(name) {
     const records = empInvoices[name] || [];
     const commission = records.reduce((s,r) => s+(r.commission||0), 0);
@@ -1436,12 +1494,13 @@ function renderRevenue(){
                     <div class="mbd-cell items"><div class="mbd-val">${records.length}</div><div class="mbd-lbl">Invoices Sent</div></div>
                 </div>
                 <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.5rem;">Invoice Log</div>
-                ${records.slice().reverse().map(r=>{
+                ${records.slice().reverse().map((r, idx)=>{
                     const ritems = r.items||[];
                     const commNote=r.commission>0?`<span style="color:#f59e0b;font-size:0.7rem;margin-left:0.5rem;">→ $${(r.commission||0).toFixed(2)} comm.</span>`:'';
+                    const realIdx = records.length - 1 - idx; // map back to original index
                     return `<div class="emp-inv-item" style="flex-direction:column;align-items:stretch;gap:0.35rem;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+                            <div style="flex:1;">
                                 <div class="emp-inv-item-name">Invoice — ${ritems.length} item${ritems.length!==1?'s':''}${commNote}</div>
                                 <div class="emp-inv-item-desc">${fdt(r.ts||Date.now())}${(r.stockCost||0)>0?` · Stock cost: $${(r.stockCost||0).toFixed(2)}`:''}</div>
                             </div>
@@ -1449,6 +1508,7 @@ function renderRevenue(){
                                 <div class="emp-inv-item-price">$${(r.invoiceTotal||r.price||0).toFixed(2)}</div>
                                 <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--green)">+$${(r.profit||r.price||0).toFixed(2)} profit</div>
                             </div>
+                            <button onclick="removeEmpInvoice('${emp.name}',${realIdx})" title="Remove this invoice" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1rem;padding:0.2rem 0.4rem;border-radius:3px;flex-shrink:0;" onmouseover="this.style.color='var(--red)';this.style.background='var(--red-dim)'" onmouseout="this.style.color='var(--text-dim)';this.style.background='none'">✕</button>
                         </div>
                         ${ritems.length>0?`<div style="padding-left:0.5rem;border-left:2px solid var(--border2);">
                             ${ritems.map(i=>{
