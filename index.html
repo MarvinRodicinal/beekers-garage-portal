@@ -412,6 +412,8 @@
                     <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
                     <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
                     <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
+                    <option value="Licked Behave">Licked Behave — Senior Mechanic</option>
+                    <option value="Dec Behave">Dec Behave — Senior Mechanic</option>
                     <option value="Josue Perez">Josue Perez — Mechanic</option>
                     <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
                     <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
@@ -536,6 +538,8 @@
                 <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
                 <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
                 <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
+                <option value="Licked Behave">Licked Behave — Senior Mechanic</option>
+                <option value="Dec Behave">Dec Behave — Senior Mechanic</option>
                 <option value="Josue Perez">Josue Perez — Mechanic</option>
                 <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
                 <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
@@ -604,6 +608,7 @@
         <div class="boss-tabs">
             <button class="boss-tab active" onclick="showBossTab('revenue',this)">Revenue</button>
             <button class="boss-tab" onclick="showBossTab('profits',this)">Profits</button>
+            <button class="boss-tab" onclick="showBossTab('payout-history',this)">Payout History</button>
             <button class="boss-tab" onclick="showBossTab('clocked',this)">Who's In</button>
             <button class="boss-tab" onclick="showBossTab('shifts',this)">Shift History</button>
         </div>
@@ -617,8 +622,23 @@
         <div class="boss-section" id="btab-profits">
             <div class="boss-summary-grid" id="profit-summary"></div>
             <div class="panel">
-                <div class="panel-title">Profit Breakdown by Mechanic</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.25rem;">
+                    <div class="panel-title" style="margin:0">Profit Breakdown by Mechanic</div>
+                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                        <button class="boss-clear-btn" onclick="clearAllProfits()">Clear All</button>
+                        <button style="padding:0.5rem 1rem;background:var(--green-dim);color:#86efac;border:1px solid var(--green);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;" onclick="payOutCommissions()">📦 Archive Period</button>
+                    </div>
+                </div>
                 <div id="profit-breakdown"></div>
+            </div>
+        </div>
+        <div class="boss-section" id="btab-payout-history">
+            <div class="panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+                    <div class="panel-title" style="margin:0">Payout History</div>
+                    <button class="boss-clear-btn" onclick="clearPayoutHistory()">Clear All</button>
+                </div>
+                <div id="payout-history-list"></div>
             </div>
         </div>
         <div class="boss-section" id="btab-clocked">
@@ -698,6 +718,8 @@ const employees = [
     { name:"Doom Dollas",       rank:"Legacy Mechanic" },
     { name:"Carlito Jarito",    rank:"Senior Mechanic" },
     { name:"Anita Fajita",      rank:"Senior Mechanic" },
+    { name:"Licked Behave",     rank:"Senior Mechanic" },
+    { name:"Dec Behave",        rank:"Senior Mechanic" },
     { name:"Josue Perez",       rank:"Mechanic" },
     { name:"Craig Homes",       rank:"Trial Mechanic" },
     { name:"Ben ShiestyKraves", rank:"Trial Mechanic" },
@@ -735,9 +757,11 @@ const BOSS_PW = 'beeker2025';
 let invoiceItems=[], invoiceCounter=1, repairCounter=0;
 let adjInterval=null, adjTimeout=null;
 let activeMechanic='';
-let empInvoices={};   // {name:[{id,name,desc,price,ts}]}
-let shifts=[];        // [{name,clockIn,clockOut}]
-let clockedIn={};     // {name:timestamp}
+let empInvoices={};
+let shifts=[];
+let clockedIn={};
+let payoutHistory=[];     // [{ts, periodStart, periodEnd, mechanics:[{name,revenue,profit,commission}], totalRevenue, totalProfit, totalCommission}]
+let lastAutoReset=null;   // timestamp of last weekly auto-reset
 
 /* ── PERSIST (Firebase) ── */
 function save() {
@@ -749,6 +773,8 @@ function save() {
     window._fbSet('shifts',         shifts);
     window._fbSet('clockedIn',      clockedIn);
     window._fbSet('activeMechanic', activeMechanic);
+    window._fbSet('payoutHistory',  payoutHistory);
+    window._fbSet('lastAutoReset',  lastAutoReset);
 }
 
 function setupListeners() {
@@ -786,6 +812,12 @@ function setupListeners() {
         activeMechanic = val || '';
         document.getElementById('active-mechanic').value = activeMechanic;
         updateActiveMechanic(false);
+    });
+    window._fbListen('payoutHistory', val => {
+        payoutHistory = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
+    });
+    window._fbListen('lastAutoReset', val => {
+        lastAutoReset = val || null;
     });
 }
 
@@ -1110,13 +1142,166 @@ function showBossTab(id,btn){
     document.getElementById('btab-'+id).classList.add('active');
     btn.classList.add('active');
 }
-function renderBossContent(){ renderRevenue(); renderProfits(); renderClockedIn(); renderShiftTable(); }
+function renderBossContent(){ renderRevenue(); renderProfits(); renderClockedIn(); renderShiftTable(); renderPayoutHistory(); }
+
+/* ── PROFITS HELPERS ── */
+function buildPayoutSnapshot() {
+    // Build a snapshot of the current period for archiving
+    const COMMISSION_RATE = 0.05;
+    const periodEnd = Date.now();
+    // Find earliest invoice ts as period start
+    let periodStart = periodEnd;
+    Object.values(empInvoices).forEach(records => records.forEach(r => {
+        if(r.ts && r.ts < periodStart) periodStart = r.ts;
+    }));
+
+    let totalRevenue=0, totalProfit=0, totalCommission=0;
+    const mechanics = employees.map(e => {
+        const records = empInvoices[e.name] || [];
+        const revenue   = records.reduce((s,r) => s+(r.invoiceTotal||0), 0);
+        const profit    = records.reduce((s,r) => s+(r.profit||0), 0);
+        const commission= records.reduce((s,r) => s+(r.commission||0), 0);
+        return { name:e.name, rank:e.rank, revenue, profit, commission, net:profit-commission };
+    }).filter(m => m.revenue > 0);
+
+    mechanics.forEach(m => { totalRevenue+=m.revenue; totalProfit+=m.profit; totalCommission+=m.commission; });
+
+    return { ts:periodEnd, periodStart, periodEnd, mechanics, totalRevenue, totalProfit, totalCommission, netProfit:totalProfit-totalCommission };
+}
+
+function clearAllProfits() {
+    showConfirm('Clear All Profits', 'Clear all invoice data for all mechanics? This cannot be undone unless you pay out first.', () => {
+        empInvoices = {};
+        save(); renderRevenue(); renderProfits();
+    });
+}
+
+function payIndividual(name) {
+    const records = empInvoices[name] || [];
+    const commission = records.reduce((s,r) => s+(r.commission||0), 0);
+    showConfirm(
+        `Pay ${name}`,
+        `Mark $${commission.toFixed(2)} commission as paid for ${name}? This will be recorded in their history.`,
+        () => {
+            // Mark all their records as commissionPaid
+            if(empInvoices[name]) {
+                empInvoices[name] = empInvoices[name].map(r => ({...r, commissionPaid: true}));
+            }
+            save();
+            renderProfits();
+            renderRevenue();
+        }
+    );
+}
+
+function payOutCommissions() {
+    if(!Object.keys(empInvoices).some(k => (empInvoices[k]||[]).length > 0)) {
+        return showConfirm('Nothing to Pay Out', 'There are no invoices to archive.', () => {});
+    }
+    showConfirm('Pay Out Commissions', 'Archive this period, mark everyone as paid, and clear the current data?', () => {
+        const snapshot = buildPayoutSnapshot();
+        if(!Array.isArray(payoutHistory)) payoutHistory = [];
+        payoutHistory.unshift(snapshot); // newest first
+        empInvoices = {};
+        save(); renderRevenue(); renderProfits(); renderPayoutHistory();
+    });
+}
+
+function renderPayoutHistory() {
+    const el = document.getElementById('payout-history-list');
+    if(!el) return;
+    const history = Array.isArray(payoutHistory) ? payoutHistory : Object.values(payoutHistory||{});
+    if(!history.length) {
+        el.innerHTML = '<div class="inv-empty" style="height:60px">No payout history yet. Use "Pay Out Commissions" in the Profits tab to archive a period.</div>';
+        return;
+    }
+
+    el.innerHTML = history.map((period, idx) => {
+        const sid = `ph-${idx}`;
+        const mechs = Array.isArray(period.mechanics) ? period.mechanics : Object.values(period.mechanics||{});
+        return `<div class="emp-invoice-row" id="${sid}">
+            <div class="emp-invoice-header" onclick="document.getElementById('${sid}').classList.toggle('open')">
+                <div>
+                    <div class="eih-name">Period ending ${fdt(period.periodEnd)}</div>
+                    <div class="eih-rank">Started ${fdt(period.periodStart)} · ${mechs.length} mechanic${mechs.length!==1?'s':''}</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="eih-total" style="color:var(--green)">$${(period.netProfit||0).toFixed(2)} net</div>
+                    <div class="eih-count">$${(period.totalCommission||0).toFixed(2)} commission paid</div>
+                </div>
+                <span class="eih-chevron">▼</span>
+            </div>
+            <div class="emp-invoice-body">
+                <div style="display:grid;grid-template-columns:1fr repeat(3,auto);gap:0.5rem;padding:0.5rem 0.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);">
+                    <span>Mechanic</span>
+                    <span style="text-align:right">Revenue</span>
+                    <span style="text-align:right;color:#f59e0b">Commission</span>
+                    <span style="text-align:right;color:var(--green)">Net Profit</span>
+                </div>
+                ${mechs.map(m => `
+                <div style="display:grid;grid-template-columns:1fr repeat(3,auto);gap:0.5rem;padding:0.6rem 0.75rem;border-bottom:1px solid var(--border);align-items:center;">
+                    <div>
+                        <div style="font-weight:600;font-size:0.88rem;">${m.name}</div>
+                        <div style="font-size:0.7rem;color:var(--text-dim);">${m.rank}</div>
+                    </div>
+                    <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;">$${(m.revenue||0).toFixed(2)}</div>
+                    <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:#f59e0b;">$${(m.commission||0).toFixed(2)}</div>
+                    <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.95rem;font-weight:700;color:var(--green);">$${(m.net||0).toFixed(2)}</div>
+                </div>`).join('')}
+                <div style="padding:0.75rem;display:flex;justify-content:space-between;align-items:center;background:var(--surface3);border-radius:0 0 4px 4px;">
+                    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-mid);">
+                        Total Revenue: $${(period.totalRevenue||0).toFixed(2)} &nbsp;·&nbsp;
+                        Commission Paid: <span style="color:#f59e0b">$${(period.totalCommission||0).toFixed(2)}</span> &nbsp;·&nbsp;
+                        Net: <span style="color:var(--green)">$${(period.netProfit||0).toFixed(2)}</span>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function clearPayoutHistory() {
+    showConfirm('Clear Payout History', 'Delete all archived payout periods? This cannot be undone.', () => {
+        payoutHistory = [];
+        save(); renderPayoutHistory();
+    });
+}
+function checkWeeklyReset() {
+    const now = new Date();
+    // Get last Monday midnight
+    const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon...
+    const daysToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+    const lastMonday = new Date(now);
+    lastMonday.setDate(now.getDate() - daysToMonday);
+    lastMonday.setHours(0, 0, 0, 0);
+    const lastMondayTs = lastMonday.getTime();
+
+    // If lastAutoReset is before last Monday and there's data to archive, auto-archive
+    if((!lastAutoReset || lastAutoReset < lastMondayTs)) {
+        const hasData = Object.keys(empInvoices).some(k => (empInvoices[k]||[]).length > 0);
+        if(hasData) {
+            const snapshot = buildPayoutSnapshot();
+            snapshot.autoReset = true;
+            if(!Array.isArray(payoutHistory)) payoutHistory = [];
+            payoutHistory.unshift(snapshot);
+            empInvoices = {};
+            lastAutoReset = Date.now();
+            save();
+            renderRevenue(); renderProfits(); renderPayoutHistory();
+            console.log('Weekly auto-reset triggered');
+        } else {
+            // No data but still update the reset timestamp so we don't keep checking
+            lastAutoReset = Date.now();
+            window._fbSet('lastAutoReset', lastAutoReset);
+        }
+    }
+}
 
 function renderProfits(){
     let totalRevenue=0, totalStockCost=0, totalProfit=0, totalCommission=0;
 
     Object.values(empInvoices).forEach(records=>records.forEach(r=>{
-        totalRevenue  += r.invoiceTotal;
+        totalRevenue  += r.invoiceTotal||0;
         totalStockCost+= r.stockCost||0;
         totalProfit   += r.profit||0;
         totalCommission+=r.commission||0;
@@ -1133,35 +1318,46 @@ function renderProfits(){
 
     const entries=employees.map(e=>{
         const records=empInvoices[e.name]||[];
-        const revenue   =records.reduce((s,r)=>s+r.invoiceTotal,0);
+        const revenue   =records.reduce((s,r)=>s+(r.invoiceTotal||0),0);
         const stockCost =records.reduce((s,r)=>s+(r.stockCost||0),0);
         const profit    =records.reduce((s,r)=>s+(r.profit||0),0);
         const commission=records.reduce((s,r)=>s+(r.commission||0),0);
         const net=profit-commission;
-        return {emp:e,records,revenue,stockCost,profit,commission,net};
+        const paid = records.length > 0 && records.every(r=>r.commissionPaid);
+        return {emp:e,records,revenue,stockCost,profit,commission,net,paid};
     }).filter(x=>x.records.length>0).sort((a,b)=>b.net-a.net);
 
     const container=document.getElementById('profit-breakdown');
     if(!entries.length){ container.innerHTML='<div class="inv-empty" style="height:60px">No data yet.</div>'; return; }
 
+    // Header row
     container.innerHTML=`
-        <div style="display:grid;grid-template-columns:1fr repeat(4,auto);gap:0.5rem;padding:0.5rem 0.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);">
+        <div style="display:grid;grid-template-columns:1fr repeat(4,auto) 120px;gap:0.5rem;padding:0.5rem 0.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);">
             <span>Mechanic</span>
             <span style="text-align:right">Revenue</span>
             <span style="text-align:right;color:var(--red)">Stock Cost</span>
             <span style="text-align:right;color:#f59e0b">Commission</span>
             <span style="text-align:right;color:var(--green)">Net Profit</span>
+            <span style="text-align:center">Payout</span>
         </div>
-        ${entries.map(({emp,revenue,stockCost,commission,net})=>`
-        <div style="display:grid;grid-template-columns:1fr repeat(4,auto);gap:0.5rem;padding:0.75rem;border-bottom:1px solid var(--border);align-items:center;">
+        ${entries.map(({emp,revenue,stockCost,commission,net,paid})=>`
+        <div style="display:grid;grid-template-columns:1fr repeat(4,auto) 120px;gap:0.5rem;padding:0.75rem;border-bottom:1px solid var(--border);align-items:center;">
             <div>
                 <div style="font-weight:600;font-size:0.9rem;">${emp.name}</div>
                 <div style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.05em;">${emp.rank}</div>
             </div>
             <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--text);">$${revenue.toFixed(2)}</div>
             <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--red);">−$${stockCost.toFixed(2)}</div>
-            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:#f59e0b;">−$${commission.toFixed(2)}</div>
+            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:#f59e0b;">$${commission.toFixed(2)}</div>
             <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.95rem;font-weight:700;color:var(--green);">$${net.toFixed(2)}</div>
+            <div style="text-align:center;">
+                ${paid
+                    ? `<span style="display:inline-flex;align-items:center;gap:0.3rem;background:var(--green-dim);border:1px solid var(--green);border-radius:4px;padding:0.25rem 0.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.07em;text-transform:uppercase;color:#86efac;">✓ Paid</span>`
+                    : commission > 0
+                        ? `<button onclick="payIndividual('${emp.name}')" style="background:var(--green-dim);color:#86efac;border:1px solid var(--green);border-radius:4px;padding:0.35rem 0.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;width:100%;">Pay $${commission.toFixed(2)}</button>`
+                        : `<span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--text-dim);">No comm.</span>`
+                }
+            </div>
         </div>`).join('')}`;
 }
 
@@ -1353,8 +1549,8 @@ function initApp() {
     renderWhosIn();
     document.getElementById('repair-counter').value = repairCounter;
     // Re-populate selects after Firebase listeners settle
-    setTimeout(populateSelects, 800);
-    // Live update Who's In timer every second
+    setTimeout(() => { populateSelects(); checkWeeklyReset(); }, 800);
+    // Live update every second
     setInterval(()=>{ renderWhosIn(); renderClockedIn(); renderShiftTable(); }, 1000);
 }
 
