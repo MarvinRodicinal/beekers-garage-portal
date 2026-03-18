@@ -406,6 +406,37 @@
                 <label for="active-mechanic">Active Mechanic</label>
                 <select id="active-mechanic" onchange="updateActiveMechanic()">
                     <option value="">— Select your name —</option>
+                    <option value="Marvin Rodicinal">Marvin Rodicinal — Owner</option>
+                    <option value="JP Purp">JP Purp — Owner</option>
+                    <option value="Rod Purp">Rod Purp — Head Mechanic</option>
+                    <option value="Ali Monky">Ali Monky — Head Mechanic</option>
+                    <option value="Marvel Krasnova">Marvel Krasnova — Head Mechanic</option>
+                    <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
+                    <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
+                    <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
+                    <option value="Josue Perez">Josue Perez — Mechanic</option>
+                    <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
+                    <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
+                    <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
+                    <option value="Clyde Foster">Clyde Foster — Trial Mechanic</option>
+                    <option value="David Brooks">David Brooks — Trial Mechanic</option>
+                    <option value="Erik Menendez">Erik Menendez — Trial Mechanic</option>
+                    <option value="Frank Sizzler">Frank Sizzler — Trial Mechanic</option>
+                    <option value="Fredrick Murphy">Fredrick Murphy — Trial Mechanic</option>
+                    <option value="George McBride">George McBride — Trial Mechanic</option>
+                    <option value="Gordo Waxfeen">Gordo Waxfeen — Trial Mechanic</option>
+                    <option value="Harry Grey">Harry Grey — Trial Mechanic</option>
+                    <option value="Johnny Hems">Johnny Hems — Trial Mechanic</option>
+                    <option value="Jordan Banks">Jordan Banks — Trial Mechanic</option>
+                    <option value="Lana Love">Lana Love — Trial Mechanic</option>
+                    <option value="Luie Lemmon">Luie Lemmon — Trial Mechanic</option>
+                    <option value="Luka Michaels">Luka Michaels — Trial Mechanic</option>
+                    <option value="Maeve Collins">Maeve Collins — Trial Mechanic</option>
+                    <option value="Meelo Jones">Meelo Jones — Trial Mechanic</option>
+                    <option value="Roux Garcia">Roux Garcia — Trial Mechanic</option>
+                    <option value="Ryan Hernandez">Ryan Hernandez — Trial Mechanic</option>
+                    <option value="Sanity Cherry">Sanity Cherry — Trial Mechanic</option>
+                    <option value="Jimmy Bellum">Jimmy Bellum — Trial Mechanic</option>
                 </select>
                 <span class="active-mechanic-badge" id="active-badge" style="display:none">
                     <span class="active-dot"></span><span id="active-badge-name"></span>
@@ -499,6 +530,37 @@
             <label class="field-label" for="clockin-name">Your Name</label>
             <select class="clockin-name-select" id="clockin-name" onchange="updateClockBtn()">
                 <option value="">— Select name —</option>
+                <option value="Marvin Rodicinal">Marvin Rodicinal — Owner</option>
+                <option value="JP Purp">JP Purp — Owner</option>
+                <option value="Rod Purp">Rod Purp — Head Mechanic</option>
+                <option value="Ali Monky">Ali Monky — Head Mechanic</option>
+                <option value="Marvel Krasnova">Marvel Krasnova — Head Mechanic</option>
+                <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
+                <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
+                <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
+                <option value="Josue Perez">Josue Perez — Mechanic</option>
+                <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
+                <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
+                <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
+                <option value="Clyde Foster">Clyde Foster — Trial Mechanic</option>
+                <option value="David Brooks">David Brooks — Trial Mechanic</option>
+                <option value="Erik Menendez">Erik Menendez — Trial Mechanic</option>
+                <option value="Frank Sizzler">Frank Sizzler — Trial Mechanic</option>
+                <option value="Fredrick Murphy">Fredrick Murphy — Trial Mechanic</option>
+                <option value="George McBride">George McBride — Trial Mechanic</option>
+                <option value="Gordo Waxfeen">Gordo Waxfeen — Trial Mechanic</option>
+                <option value="Harry Grey">Harry Grey — Trial Mechanic</option>
+                <option value="Johnny Hems">Johnny Hems — Trial Mechanic</option>
+                <option value="Jordan Banks">Jordan Banks — Trial Mechanic</option>
+                <option value="Lana Love">Lana Love — Trial Mechanic</option>
+                <option value="Luie Lemmon">Luie Lemmon — Trial Mechanic</option>
+                <option value="Luka Michaels">Luka Michaels — Trial Mechanic</option>
+                <option value="Maeve Collins">Maeve Collins — Trial Mechanic</option>
+                <option value="Meelo Jones">Meelo Jones — Trial Mechanic</option>
+                <option value="Roux Garcia">Roux Garcia — Trial Mechanic</option>
+                <option value="Ryan Hernandez">Ryan Hernandez — Trial Mechanic</option>
+                <option value="Sanity Cherry">Sanity Cherry — Trial Mechanic</option>
+                <option value="Jimmy Bellum">Jimmy Bellum — Trial Mechanic</option>
             </select>
             <button class="clockin-btn in" id="clockin-btn" onclick="toggleClock()">Clock In</button>
             <div class="shift-log">
@@ -575,6 +637,7 @@
                     <button class="boss-clear-btn" onclick="clearAllShifts()">Clear History</button>
                 </div>
                 <div style="overflow-x:auto;">
+                    <div id="shift-hours-summary"></div>
                     <table class="shift-history-table">
                         <thead><tr><th>Employee</th><th>Clock In</th><th>Clock Out</th><th>Duration</th></tr></thead>
                         <tbody id="shift-table-body"></tbody>
@@ -981,6 +1044,8 @@ function renderWhosIn() {
 function toggleClock() {
     const name=document.getElementById('clockin-name').value;
     if(!name) return alert('Please select your name first.');
+    // Normalize in case Firebase returned an object
+    if(!Array.isArray(shifts)) shifts = Object.values(shifts||{});
     if(clockedIn[name]) {
         const shift=shifts.find(s=>s.name===name&&s.clockOut===null);
         if(shift) shift.clockOut=Date.now();
@@ -994,7 +1059,8 @@ function toggleClock() {
 
 function renderShiftLog() {
     const today=new Date(); today.setHours(0,0,0,0);
-    const list=shifts.filter(s=>s.clockIn>=today.getTime()).slice().reverse();
+    const allShifts = Array.isArray(shifts) ? shifts : Object.values(shifts||{});
+    const list=allShifts.filter(s=>s.clockIn>=today.getTime()).slice().reverse();
     const el=document.getElementById('shift-log-list');
     if(!list.length){ el.innerHTML='<div class="no-shifts">No shifts recorded yet.</div>'; return; }
     el.innerHTML=list.map(s=>`
@@ -1235,14 +1301,43 @@ function clearAllShifts(){
 
 function renderShiftTable(){
     const tbody=document.getElementById('shift-table-body');
-    const all=shifts.slice().reverse();
+    // Firebase can return arrays as objects — normalize
+    const all = Array.isArray(shifts) ? shifts : Object.values(shifts||{});
     if(!all.length){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:1rem">No shifts recorded.</td></tr>`; return; }
-    tbody.innerHTML=all.map(s=>`<tr>
-        <td>${s.name}</td>
-        <td>${fdt(s.clockIn)}</td>
-        <td>${s.clockOut?fdt(s.clockOut):'<span style="color:var(--amber)">Active</span>'}</td>
-        <td class="dur">${s.clockOut?fd(s.clockOut-s.clockIn):'—'}</td>
-    </tr>`).join('');
+
+    // Build total hours per employee (completed shifts only)
+    const totals = {};
+    all.forEach(s=>{
+        if(!s.clockOut) return;
+        totals[s.name] = (totals[s.name]||0) + (s.clockOut - s.clockIn);
+    });
+
+    // Total hours summary
+    const summaryHtml = Object.keys(totals).length ? `
+        <div style="margin-bottom:1.5rem;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.75rem;">Total Hours per Employee</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.5rem;">
+                ${Object.entries(totals).sort((a,b)=>b[1]-a[1]).map(([name,ms])=>`
+                <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:0.65rem 0.85rem;display:flex;justify-content:space-between;align-items:center;">
+                    <span style="font-size:0.85rem;font-weight:600;">${name}</span>
+                    <span style="font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--green);">${fd(ms)}</span>
+                </div>`).join('')}
+            </div>
+        </div>` : '';
+
+    // Inject summary above table
+    const summaryEl = document.getElementById('shift-hours-summary');
+    if(summaryEl) summaryEl.innerHTML = summaryHtml;
+
+    tbody.innerHTML=all.slice().reverse().map(s=>{
+        const dur = s.clockOut ? fd(s.clockOut - s.clockIn) : '—';
+        return `<tr>
+            <td>${s.name}</td>
+            <td>${fdt(s.clockIn)}</td>
+            <td>${s.clockOut ? fdt(s.clockOut) : '<span style="color:var(--amber)">Active</span>'}</td>
+            <td class="dur">${s.clockOut ? dur : '<span style="color:var(--amber)">—</span>'}</td>
+        </tr>`;
+    }).join('');
 }
 
 /* ── INIT ── */
@@ -1256,6 +1351,8 @@ function initApp() {
     renderInvoice();
     renderWhosIn();
     document.getElementById('repair-counter').value = repairCounter;
+    // Re-populate selects after Firebase listeners settle
+    setTimeout(populateSelects, 800);
     // Live update Who's In timer every second
     setInterval(()=>{ renderWhosIn(); renderClockedIn(); }, 1000);
 }
