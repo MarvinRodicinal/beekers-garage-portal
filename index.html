@@ -1299,15 +1299,15 @@ function clearAllShifts(){
 
 function renderShiftTable(){
     const tbody=document.getElementById('shift-table-body');
-    // Firebase can return arrays as objects — normalize
     const all = Array.isArray(shifts) ? shifts : Object.values(shifts||{});
     if(!all.length){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:1rem">No shifts recorded.</td></tr>`; return; }
 
-    // Build total hours per employee (completed shifts only)
+    // Build total hours per employee — completed shifts + running time for active ones
     const totals = {};
     all.forEach(s=>{
-        if(!s.clockOut) return;
-        totals[s.name] = (totals[s.name]||0) + (s.clockOut - s.clockIn);
+        const end = (s.clockOut && s.clockOut > 0) ? s.clockOut : Date.now();
+        const ms = end - s.clockIn;
+        if(ms > 0) totals[s.name] = (totals[s.name]||0) + ms;
     });
 
     // Total hours summary
@@ -1323,17 +1323,20 @@ function renderShiftTable(){
             </div>
         </div>` : '';
 
-    // Inject summary above table
     const summaryEl = document.getElementById('shift-hours-summary');
     if(summaryEl) summaryEl.innerHTML = summaryHtml;
 
-    tbody.innerHTML=all.slice().reverse().map(s=>{
-        const dur = s.clockOut ? fd(s.clockOut - s.clockIn) : '—';
+    tbody.innerHTML = all.slice().reverse().map(s=>{
+        const isActive = !s.clockOut || s.clockOut === 0 || s.clockOut === null;
+        const dur = isActive ? fd(Date.now() - s.clockIn) : fd(s.clockOut - s.clockIn);
+        const clockOutDisplay = isActive
+            ? `<span style="color:var(--amber)">Still clocked in</span>`
+            : fdt(s.clockOut);
         return `<tr>
             <td>${s.name}</td>
             <td>${fdt(s.clockIn)}</td>
-            <td>${s.clockOut ? fdt(s.clockOut) : '<span style="color:var(--amber)">Active</span>'}</td>
-            <td class="dur">${s.clockOut ? dur : '<span style="color:var(--amber)">—</span>'}</td>
+            <td>${clockOutDisplay}</td>
+            <td class="dur">${isActive ? `<span style="color:var(--amber)">${dur}</span>` : dur}</td>
         </tr>`;
     }).join('');
 }
@@ -1352,7 +1355,7 @@ function initApp() {
     // Re-populate selects after Firebase listeners settle
     setTimeout(populateSelects, 800);
     // Live update Who's In timer every second
-    setInterval(()=>{ renderWhosIn(); renderClockedIn(); }, 1000);
+    setInterval(()=>{ renderWhosIn(); renderClockedIn(); renderShiftTable(); }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
