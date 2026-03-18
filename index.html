@@ -3,1561 +3,1219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beeker's Garage - Employee Portal</title>
-    
-    <!-- Open Graph Meta Tags for Link Previews -->
-    <meta property="og:title" content="Beeker's Garage - Employee Portal">
-    <meta property="og:description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts - Lucid City RP">
-    <meta property="og:image" content="https://i.imgur.com/your-uploaded-image.png">
-    <meta property="og:url" content="https://your-domain.com">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Beeker's Garage">
-    
-    <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Beeker's Garage - Employee Portal">
-    <meta name="twitter:description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts">
-    <meta name="twitter:image" content="https://i.imgur.com/your-uploaded-image.png">
-    
-    <!-- Standard Meta Tags -->
-    <meta name="description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts - Lucid City RP">
-    <meta name="keywords" content="Beeker's Garage, Lucid City, RP, crafting calculator, invoice, employees">
-    <meta name="author" content="Beeker's Garage & Parts">
+    <title>Beeker's Garage — Employee Portal</title>
+    <meta property="og:title" content="Beeker's Garage — Employee Portal">
+    <meta property="og:description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts — Lucid City RP">
+    <meta name="description" content="Crafting calculator, invoice system, and employee directory for Beeker's Garage & Parts — Lucid City RP">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
         :root {
-            --beeker-green: #2d5016;
-            --beeker-light-green: #4a7c2a;
-            --beeker-dark-green: #1a3009;
-            --white: #ffffff;
-            --light-gray: #f8f9fa;
-            --medium-gray: #e9ecef;
-            --dark-gray: #495057;
-            --text-dark: #212529;
-            --shadow: 0 2px 8px rgba(45, 80, 22, 0.1);
-            --shadow-hover: 0 4px 16px rgba(45, 80, 22, 0.15);
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--gradient-primary);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        
-        /* Header */
-        .header {
-            background: var(--beeker-green);
-            box-shadow: var(--shadow);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-        
-        .logo img {
-            height: 60px;
-            width: auto;
-            border-radius: 8px;
-        }
-        
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-teal);
-        }
-        
-        .nav-tabs {
-            display: flex;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.25rem;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .nav-tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            border-radius: 8px;
-            color: var(--white);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .nav-tab.active {
-            background: var(--white);
-            color: var(--beeker-green);
-            box-shadow: var(--shadow);
-        }
-        
-        .nav-tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Main Content */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-        }
-        
-        /* Card Styles */
-        .card {
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: box-shadow 0.2s ease;
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--light-gray);
-        }
-        
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 1.2rem;
-        }
-        
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-        
-        /* Recipe Input */
-        .recipe-input {
-            width: 80px;
-            padding: 0.5rem;
-            border: 2px solid var(--medium-gray);
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-align: center;
-            background: var(--white);
-        }
-        
-        .recipe-input:focus {
-            outline: none;
-            border-color: var(--beeker-green);
-        }
-        
-        /* Remove number input arrows */
-        #repair-counter::-webkit-outer-spin-button,
-        #repair-counter::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        
-        #repair-counter {
-            -moz-appearance: textfield;
-        }
-        
-        /* Additional Material Icons */
-        .material-icon.electronics {
-            background: linear-gradient(135deg, #ffc107, #fd7e14);
-        }
-        
-        .material-icon.wire {
-            background: linear-gradient(135deg, #dc3545, #e83e8c);
-        }
-        
-        .material-icon.glass {
-            background: linear-gradient(135deg, #17a2b8, #6610f2);
-        }
-        
-        .material-icon.rubber {
-            background: linear-gradient(135deg, #343a40, #495057);
-        }
-        
-        /* Totals Section */
-        .totals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        
-        .total-item {
-            background: linear-gradient(135deg, var(--light-gray), var(--white));
-            border: 2px solid var(--medium-gray);
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: all 0.2s ease;
-        }
-        
-        .total-item:hover {
-            border-color: var(--beeker-green);
-            transform: translateY(-1px);
-        }
-        
-        .total-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-        
-        .total-name {
-            flex: 1;
-            font-weight: 500;
-            color: var(--beeker-dark-green);
-        }
-        
-        .total-quantity {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--beeker-green);
-            min-width: 60px;
-            text-align: center;
-            background: var(--white);
-            border-radius: 6px;
-            padding: 0.25rem 0.5rem;
-        }
-        
-        /* Recipe Cards */
-        .recipe-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .recipe-card {
-            background: var(--white);
-            border: 2px solid var(--medium-gray);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .recipe-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #dc3545, #fd7e14);
-        }
-        
-        .recipe-card.repair-kit::before {
-            background: linear-gradient(90deg, #17a2b8, #20c997);
-        }
-        
-        .recipe-card.heavy-cutter::before {
-            background: linear-gradient(90deg, #28a745, #20c997);
-        }
-        
-        .recipe-card.advanced::before {
-            background: linear-gradient(90deg, #6f42c1, #e83e8c);
-        }
-        
-        .recipe-card.legendary::before {
-            background: linear-gradient(90deg, #fd7e14, #ffc107);
-        }
-        
-        .recipe-card:hover {
-            border-color: var(--primary-teal);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .recipe-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        
-        .recipe-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #dc3545, #fd7e14);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-        
-        .recipe-card.repair-kit .recipe-icon {
-            background: linear-gradient(135deg, #17a2b8, #20c997);
-        }
-        
-        .recipe-card.heavy-cutter .recipe-icon {
-            background: linear-gradient(135deg, #28a745, #20c997);
-        }
-        
-        .recipe-card.advanced .recipe-icon {
-            background: linear-gradient(135deg, #6f42c1, #e83e8c);
-        }
-        
-        .recipe-card.legendary .recipe-icon {
-            background: linear-gradient(135deg, #fd7e14, #ffc107);
-        }
-        
-        .recipe-name {
-            flex: 1;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-        }
-        
-        .recipe-quantity {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-teal);
-            min-width: 60px;
-            text-align: center;
-            background: var(--light-gray);
-            border-radius: 8px;
-            padding: 0.25rem 0.5rem;
-        }
-        
-        .recipe-materials {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-        
-        .material-req {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--light-gray);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--dark-gray);
-        }
-        
-        .material-req .material-icon {
-            width: 24px;
-            height: 24px;
-            font-size: 0.8rem;
-            margin: 0;
-        }
-        
-        .material-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin: 0 auto 1rem;
-        }
-        
-        .material-icon.recyclable {
-            background: var(--gradient-primary);
-        }
-        
-        .material-icon.titanium {
-            background: linear-gradient(135deg, #6c757d, #adb5bd);
-        }
-        
-        .material-icon.aluminum {
-            background: linear-gradient(135deg, #dee2e6, #f8f9fa);
-            color: var(--dark-gray);
-        }
-        
-        .material-icon.steel {
-            background: linear-gradient(135deg, #495057, #6c757d);
-        }
-        
-        .material-icon.plastic {
-            background: linear-gradient(135deg, #17a2b8, #20c997);
-        }
-        
-        /* Cost Breakdown */
-        .cost-breakdown {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--light-gray);
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        
-        .cost-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--beeker-green);
-            margin-bottom: 0.5rem;
-        }
-        
-        .cost-detail {
-            font-size: 0.85rem;
-            color: var(--dark-gray);
-            line-height: 1.4;
-        }
-        
-        .cost-detail span {
-            background: var(--white);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-        
-        .cost-detail strong {
-            color: var(--beeker-green);
-            font-weight: 700;
-        }
-        
-        /* Employee Hub */
-        .employee-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-        
-        .employee-card {
-            background: var(--white);
-            border: 1px solid var(--medium-gray);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.2s ease;
-        }
-        
-        .employee-card:hover {
-            border-color: var(--primary-teal);
-            box-shadow: var(--shadow);
-        }
-        
-        .employee-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
-        }
-        
-        .employee-rank {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .rank-owner {
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
-            color: #8b6914;
-        }
-        
-        .rank-head-mechanic {
-            background: linear-gradient(135deg, #6f42c1, #e83e8c);
-            color: var(--white);
-        }
-        
-        .employee-rank[class*="senior"] {
-            background: var(--beeker-green) !important;
-            color: var(--white) !important;
-        }
-        
-        .rank-senior-mechanic {
-            background: var(--gradient-primary);
-            color: var(--white);
-        }
-        
-        .rank-mechanic {
-            background: linear-gradient(135deg, #6c757d, #868e96);
-            color: var(--white);
-        }
-        
-        .rank-trial-mechanic {
-            background: linear-gradient(135deg, #fd7e14, #ffc107);
-            color: var(--white);
-        }
-        
-        .rank-towie {
-            background: linear-gradient(135deg, var(--medium-gray), var(--light-gray));
-            color: var(--dark-gray);
-        }
-        
-        /* Search and Filter */
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .search-input {
-            flex: 1;
-            min-width: 250px;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--medium-gray);
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: var(--beeker-green);
-        }
-        
-        .filter-select {
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--medium-gray);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--white);
-        }
-        
-        .filter-select:focus {
-            outline: none;
-            border-color: var(--beeker-green);
-        }
-        
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 0 1rem;
-            }
-            
-            .nav-tabs {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .nav-tab {
-                flex: 1;
-                text-align: center;
-                padding: 0.75rem 0.5rem;
-            }
-            
-            .main-content {
-                padding: 1rem;
-            }
-            
-            .card {
-                padding: 1.5rem;
-            }
-            
-            .craft-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .recipe-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .inventory-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .totals-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .employee-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-input {
-                min-width: unset;
-            }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .page.active {
-            animation: fadeIn 0.3s ease-out;
-        }
+            --bg:        #0f0f0f;
+            --surface:   #161616;
+            --surface2:  #1e1e1e;
+            --surface3:  #252525;
+            --border:    #2a2a2a;
+            --border2:   #363636;
+            --red:       #dc2626;
+            --red-dim:   #7f1d1d;
+            --green:     #22c55e;
+            --green-dim: #166534;
+            --amber:     #f59e0b;
+            --purple:    #a855f7;
+            --cyan:      #06b6d4;
+            --text:      #f0f0f0;
+            --text-mid:  #9ca3af;
+            --text-dim:  #4b5563;
+            --gold:      #fbbf24;
+        }
+
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+        body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.5; }
+
+        /* HEADER */
+        .header { background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:200; }
+        .header-inner { max-width:1440px; margin:0 auto; padding:0 2rem; display:flex; align-items:center; justify-content:space-between; gap:2rem; height:72px; }
+        .wordmark { display:flex; align-items:center; flex-shrink:0; text-decoration:none; }
+        .wordmark-badge { background:var(--red); color:#fff; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.2rem 0.5rem; border-radius:3px 0 0 3px; writing-mode:vertical-rl; transform:rotate(180deg); line-height:1; }
+        .wordmark-main { border:1px solid var(--border2); border-left:none; padding:0.4rem 0.8rem; border-radius:0 3px 3px 0; }
+        .wordmark-top { font-family:'Barlow Condensed',sans-serif; font-style:italic; font-weight:700; font-size:1.05rem; color:var(--text-mid); letter-spacing:0.05em; line-height:1; }
+        .wordmark-bottom { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.5rem; letter-spacing:0.12em; line-height:1; color:var(--text); }
+        nav { display:flex; }
+        .nav-btn { background:none; border:none; border-bottom:3px solid transparent; color:var(--text-mid); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.1em; text-transform:uppercase; padding:0 1.25rem; height:72px; cursor:pointer; transition:color 0.15s,border-color 0.15s; display:flex; align-items:center; gap:0.4rem; }
+        .nav-btn:hover { color:var(--text); }
+        .nav-btn.active { color:var(--text); border-bottom-color:var(--red); }
+        .portal-tag { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--text-dim); flex-shrink:0; }
+
+        /* LAYOUT */
+        main { max-width:1440px; margin:0 auto; padding:2.5rem 2rem; }
+        .page { display:none; }
+        .page.active { display:block; animation:fadeUp 0.25s ease-out; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);} }
+        .section-label { display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem; }
+        .section-label::before { content:''; display:block; width:4px; height:28px; background:var(--red); border-radius:2px; }
+        .section-label h2 { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.6rem; letter-spacing:0.08em; text-transform:uppercase; }
+        .section-label .label-meta { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-left:auto; }
+        .panel { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:1.75rem; margin-bottom:1.5rem; }
+        .panel-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-mid); margin-bottom:1.25rem; display:flex; align-items:center; gap:0.5rem; }
+        .panel-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+        /* CRAFTING */
+        .recipe-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+        .recipe-card { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:1.25rem; position:relative; overflow:hidden; transition:border-color 0.2s,transform 0.2s; }
+        .recipe-card:hover { border-color:var(--border2); transform:translateY(-2px); }
+        .recipe-card-stripe { position:absolute; top:0; left:0; right:0; height:3px; }
+        .stripe-teal   { background:linear-gradient(90deg,#0891b2,#06b6d4); }
+        .stripe-green  { background:linear-gradient(90deg,#16a34a,#22c55e); }
+        .stripe-purple { background:linear-gradient(90deg,#7c3aed,#a855f7); }
+        .stripe-amber  { background:linear-gradient(90deg,#d97706,#fbbf24); }
+        .recipe-top { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border); }
+        .recipe-name-text { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:0.05em; flex:1; }
+        .recipe-qty-input { width:72px; padding:0.4rem 0.5rem; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Share Tech Mono',monospace; font-size:1.1rem; text-align:center; }
+        .recipe-qty-input:focus { outline:none; border-color:var(--red); }
+        .recipe-qty-input::-webkit-outer-spin-button,.recipe-qty-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+        .recipe-qty-input{-moz-appearance:textfield;}
+        .mat-tags { display:flex; flex-wrap:wrap; gap:0.4rem; }
+        .mat-tag { display:flex; align-items:center; gap:0.35rem; background:var(--surface3); border:1px solid var(--border); border-radius:3px; padding:0.2rem 0.5rem; font-size:0.78rem; color:var(--text-mid); font-family:'Share Tech Mono',monospace; }
+        .mat-tag-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+        .info-banner { background:var(--surface2); border:1px solid #1d4ed8; border-left:3px solid #3b82f6; border-radius:4px; padding:0.9rem 1rem; margin-bottom:1.25rem; font-size:0.85rem; color:#93c5fd; }
+        .totals-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:0.75rem; }
+        .total-card { background:var(--surface2); border:1px solid var(--border); border-radius:5px; padding:0.85rem 1rem; display:flex; align-items:center; gap:0.75rem; }
+        .total-dot { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.95rem; flex-shrink:0; }
+        .total-label { flex:1; font-size:0.8rem; color:var(--text-mid); font-weight:500; }
+        .total-val { font-family:'Share Tech Mono',monospace; font-size:1.2rem; font-weight:700; color:var(--text); min-width:40px; text-align:right; }
+
+        /* INVOICE */
+        .invoice-layout { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start; }
+        @media(max-width:900px){.invoice-layout{grid-template-columns:1fr;}}
+        .field-label { display:block; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:0.4rem; }
+        .field-input,.field-select { width:100%; padding:0.65rem 0.85rem; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.95rem; }
+        .field-input:focus,.field-select:focus { outline:none; border-color:var(--red); }
+        .field-select option { background:var(--surface2); }
+        .field-group { margin-bottom:1rem; }
+        .calc-preview { background:var(--surface3); border:1px solid var(--border2); border-radius:4px; padding:0.6rem 0.85rem; margin-top:0.5rem; font-family:'Share Tech Mono',monospace; font-size:0.9rem; display:none; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; padding:0.7rem 1.25rem; border:none; border-radius:4px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:0.07em; text-transform:uppercase; cursor:pointer; transition:opacity 0.15s,transform 0.1s; }
+        .btn:hover{opacity:0.88;} .btn:active{transform:scale(0.97);}
+        .btn-primary { background:var(--red); color:#fff; width:100%; margin-top:0.25rem; }
+        .btn-danger  { background:#7f1d1d; color:#fca5a5; }
+        .btn-ghost   { background:var(--surface3); border:1px solid var(--border2); color:var(--text-mid); }
+        .quick-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; }
+        .quick-btn { padding:0.65rem 0.75rem; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; text-align:left; transition:background 0.15s; }
+        .quick-btn:hover { background:var(--surface2); }
+        .quick-btn-price { display:block; font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:var(--green); margin-top:0.2rem; }
+        .invoice-display { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:1.5rem; }
+        .invoice-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border); }
+        .invoice-heading { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.3rem; letter-spacing:0.12em; text-transform:uppercase; }
+        #invoice-items { min-height:120px; }
+        .inv-row { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0.85rem; background:var(--surface3); border-radius:4px; margin-bottom:0.5rem; gap:0.75rem; }
+        .inv-row-name { font-weight:600; font-size:0.92rem; flex:1; }
+        .inv-row-meta { font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-top:0.1rem; }
+        .inv-row-price { font-family:'Share Tech Mono',monospace; font-weight:700; font-size:1rem; color:var(--green); white-space:nowrap; }
+        .inv-remove { background:none; border:none; color:var(--text-dim); cursor:pointer; font-size:1rem; padding:0.1rem 0.3rem; border-radius:3px; transition:color 0.15s,background 0.15s; }
+        .inv-remove:hover { color:var(--red); background:var(--red-dim); }
+        .inv-empty { display:flex; align-items:center; justify-content:center; height:80px; color:var(--text-dim); font-family:'Share Tech Mono',monospace; font-size:0.8rem; }
+        .invoice-total-row { display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--border2); padding-top:1rem; margin-top:0.75rem; }
+        .inv-total-label { font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:1.1rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-mid); }
+        .inv-total-amt { font-family:'Share Tech Mono',monospace; font-size:1.5rem; font-weight:700; color:var(--green); }
+        .repair-counter-wrap { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:1rem 1.25rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1rem; }
+        .repair-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.95rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-mid); display:flex; align-items:center; gap:0.5rem; }
+        .counter-controls { display:flex; align-items:center; gap:0.4rem; }
+        .counter-btn { width:30px; height:30px; border:1px solid var(--border2); border-radius:4px; background:var(--surface3); color:var(--text); font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; user-select:none; }
+        .counter-btn.minus:hover { background:var(--red-dim); border-color:var(--red); color:#fca5a5; }
+        .counter-btn.plus:hover  { background:var(--green-dim); border-color:var(--green); color:#86efac; }
+        .counter-display { font-family:'Share Tech Mono',monospace; font-size:1.4rem; font-weight:700; color:var(--text); width:64px; text-align:center; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; padding:0.2rem; -moz-appearance:textfield; }
+        .counter-display::-webkit-outer-spin-button,.counter-display::-webkit-inner-spin-button{-webkit-appearance:none;}
+        .counter-display:focus{outline:none;border-color:var(--red);}
+        .mechanic-selector { display:flex; align-items:center; gap:0.75rem; background:var(--surface3); border:1px solid var(--border2); border-radius:6px; padding:0.75rem 1rem; margin-bottom:1rem; flex-wrap:wrap; }
+        .mechanic-selector label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-dim); white-space:nowrap; }
+        .mechanic-selector select { flex:1; min-width:160px; background:var(--surface2); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.9rem; padding:0.3rem 0.5rem; }
+        .mechanic-selector select:focus{outline:none;}
+        .active-mechanic-badge { display:inline-flex; align-items:center; gap:0.4rem; background:var(--green-dim); border:1px solid var(--green); border-radius:4px; padding:0.2rem 0.6rem; font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:#86efac; }
+        .active-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+        @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+        /* DIRECTORY */
+        .dir-layout { display:grid; grid-template-columns:280px 1fr; gap:1.5rem; align-items:start; }
+        @media(max-width:900px){.dir-layout{grid-template-columns:1fr;}}
+        .stats-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:0.75rem; margin-bottom:1.5rem; }
+        .stat-tile { background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:1rem; text-align:center; position:relative; overflow:hidden; }
+        .stat-tile::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+        .stat-tile.all::before    { background:var(--text-mid); }
+        .stat-tile.owner::before  { background:var(--gold); }
+        .stat-tile.head::before   { background:var(--purple); }
+        .stat-tile.legacy::before { background:#f97316; }
+        .stat-tile.senior::before { background:var(--green); }
+        .stat-tile.mech::before   { background:var(--amber); }
+        .stat-tile.trial::before  { background:#fb923c; }
+        .stat-num { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:800; line-height:1; margin-bottom:0.25rem; }
+        .stat-lbl { font-size:0.7rem; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-dim); font-weight:600; }
+        .emp-controls { display:flex; gap:0.75rem; margin-bottom:1.25rem; flex-wrap:wrap; }
+        .emp-search { flex:1; min-width:200px; padding:0.65rem 0.85rem; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.95rem; }
+        .emp-search:focus{outline:none;border-color:var(--red);}
+        .emp-search::placeholder{color:var(--text-dim);}
+        .rank-select { padding:0.65rem 0.85rem; background:var(--surface3); border:1px solid var(--border2); border-radius:4px; color:var(--text); font-family:'Barlow',sans-serif; font-size:0.95rem; }
+        .rank-select:focus{outline:none;border-color:var(--red);}
+        .rank-select option{background:var(--surface2);}
+        .employee-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.75rem; }
+        .emp-card { background:var(--surface2); border:1px solid var(--border); border-radius:5px; padding:1rem 1.1rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem; transition:border-color 0.15s; }
+        .emp-card:hover{border-color:var(--border2);}
+        .emp-card-left{flex:1;min-width:0;}
+        .emp-name{font-weight:600;font-size:0.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .emp-status{font-family:'Share Tech Mono',monospace;font-size:0.68rem;margin-top:0.2rem;}
+        .emp-status.clocked-in{color:var(--green);}
+        .emp-status.clocked-out{color:var(--text-dim);}
+        .emp-rank-badge{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.07em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+        .badge-owner  {background:#78350f;color:var(--gold);border:1px solid #92400e;}
+        .badge-head   {background:#581c87;color:#d8b4fe;border:1px solid #7c3aed;}
+        .badge-legacy {background:#431407;color:#fdba74;border:1px solid #c2410c;}
+        .badge-senior {background:#14532d;color:#86efac;border:1px solid #16a34a;}
+        .badge-mech   {background:#1c1917;color:var(--text-mid);border:1px solid #44403c;}
+        .badge-trial  {background:#451a03;color:#fdba74;border:1px solid #92400e;}
+        .badge-towie  {background:var(--surface3);color:var(--text-dim);border:1px solid var(--border);}
+
+        /* CLOCK IN */
+        .clockin-panel{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.5rem;}
+        .clockin-name-select{width:100%;padding:0.65rem 0.85rem;background:var(--surface3);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Barlow',sans-serif;font-size:0.95rem;margin-top:0.4rem;}
+        .clockin-name-select:focus{outline:none;border-color:var(--red);}
+        .clockin-name-select option{background:var(--surface2);}
+        .clockin-btn{width:100%;padding:1rem;border:none;border-radius:5px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.15s;margin-top:0.75rem;}
+        .clockin-btn.in {background:var(--green-dim);color:#86efac;border:1px solid var(--green);}
+        .clockin-btn.out{background:var(--red-dim);color:#fca5a5;border:1px solid var(--red);}
+        .shift-log{margin-top:1.25rem;}
+        .shift-log-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.75rem;}
+        .shift-entry{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:0.6rem 0.85rem;margin-bottom:0.4rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;}
+        .shift-name{color:var(--text);font-weight:700;margin-bottom:0.15rem;}
+        .shift-times{color:var(--text-dim);}
+        .shift-duration{color:var(--green);}
+        .shift-active{color:var(--amber);}
+        .no-shifts{color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.8rem;text-align:center;padding:1rem 0;}
+
+        /* BOSS VIEW */
+        .boss-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:1rem;}
+        .boss-lock h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);}
+        .boss-pw-row{display:flex;gap:0.5rem;}
+        .boss-pw-input{padding:0.65rem 1rem;background:var(--surface3);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:1rem;width:220px;}
+        .boss-pw-input:focus{outline:none;border-color:var(--red);}
+        .boss-unlock-btn{padding:0.65rem 1.25rem;background:var(--red);color:#fff;border:none;border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.95rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;}
+        .boss-pw-err{color:#fca5a5;font-family:'Share Tech Mono',monospace;font-size:0.8rem;display:none;}
+        .boss-content{display:none;}
+        .boss-content.unlocked{display:block;}
+        .boss-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;}
+        .boss-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--text-mid);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.95rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.75rem 1.25rem;cursor:pointer;margin-bottom:-1px;transition:color 0.15s,border-color 0.15s;}
+        .boss-tab.active{color:var(--text);border-bottom-color:var(--red);}
+        .boss-section{display:none;}
+        .boss-section.active{display:block;}
+        .boss-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem;}
+        .bsg-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1.25rem;}
+        .bsg-val{font-family:'Share Tech Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--green);margin-bottom:0.25rem;}
+        .bsg-lbl{font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);font-weight:600;}
+        .emp-invoice-row{background:var(--surface2);border:1px solid var(--border);border-radius:5px;margin-bottom:0.5rem;overflow:hidden;}
+        .emp-invoice-header{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;cursor:pointer;gap:1rem;}
+        .emp-invoice-header:hover{background:var(--surface3);}
+        .eih-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.05em;}
+        .eih-rank{font-size:0.72rem;color:var(--text-dim);font-weight:600;letter-spacing:0.05em;}
+        .eih-total{font-family:'Share Tech Mono',monospace;font-size:1rem;font-weight:700;color:var(--green);}
+        .eih-count{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);}
+        .eih-chevron{color:var(--text-dim);font-size:0.8rem;transition:transform 0.2s;}
+        .emp-invoice-row.open .eih-chevron{transform:rotate(180deg);}
+        .emp-invoice-body{display:none;padding:0 1rem 1rem;}
+        .emp-invoice-row.open .emp-invoice-body{display:block;}
+        .emp-inv-item{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0.75rem;background:var(--surface3);border-radius:3px;margin-bottom:0.3rem;gap:0.5rem;}
+        .emp-inv-item-name{font-size:0.85rem;flex:1;}
+        .emp-inv-item-desc{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);}
+        .emp-inv-item-price{font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--green);white-space:nowrap;}
+        .emp-inv-clear{margin-top:0.5rem;padding:0.4rem 0.75rem;background:var(--red-dim);color:#fca5a5;border:1px solid var(--red);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;}
+        .clocked-in-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-bottom:1rem;}
+        .cil-card{background:var(--surface2);border:1px solid var(--green-dim);border-radius:5px;padding:0.85rem 1rem;display:flex;align-items:center;gap:0.75rem;}
+        .cil-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+        .cil-name{font-weight:600;font-size:0.9rem;}
+        .cil-since{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);}
+        .shift-history-table{width:100%;border-collapse:collapse;font-size:0.82rem;}
+        .shift-history-table th{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;font-size:0.75rem;color:var(--text-dim);padding:0.5rem 0.75rem;text-align:left;border-bottom:1px solid var(--border);}
+        .shift-history-table td{padding:0.6rem 0.75rem;border-bottom:1px solid var(--border);color:var(--text-mid);}
+        .shift-history-table td:first-child{color:var(--text);font-weight:600;}
+        .shift-history-table td.dur{font-family:'Share Tech Mono',monospace;color:var(--green);}
+        .shift-history-table tr:last-child td{border-bottom:none;}
+        .boss-clear-btn{padding:0.5rem 1rem;background:var(--red-dim);color:#fca5a5;border:1px solid var(--red);border-radius:4px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;}
+
+        /* MECHANIC BREAKDOWN */
+        .mech-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin:0.75rem 0 1rem;}
+        .mbd-cell{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:0.5rem 0.75rem;text-align:center;}
+        .mbd-val{font-family:'Share Tech Mono',monospace;font-size:0.95rem;font-weight:700;color:var(--text);}
+        .mbd-lbl{font-size:0.65rem;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-dim);margin-top:0.15rem;}
+        .mbd-cell.commission .mbd-val{color:#f59e0b;}
+        .mbd-cell.upgrades .mbd-val{color:var(--purple);}
+        .mbd-cell.repairs .mbd-val{color:var(--cyan);}
+        .mbd-cell.items .mbd-val{color:var(--green);}
+        .commission-badge{display:inline-flex;align-items:center;gap:0.35rem;background:#78350f;border:1px solid #f59e0b;border-radius:3px;padding:0.15rem 0.5rem;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:#fcd34d;margin-left:0.5rem;}
+        .bsg-card.commission-card .bsg-val{color:#f59e0b;}
+
+        /* CONFIRM MODAL */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+        .modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:2rem;max-width:380px;width:90%;text-align:center;}
+        .modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.75rem;}
+        .modal-msg{font-size:0.9rem;color:var(--text-mid);margin-bottom:1.5rem;line-height:1.5;}
+        .modal-btns{display:flex;gap:0.75rem;justify-content:center;}
+        .modal-cancel{padding:0.65rem 1.5rem;background:var(--surface3);border:1px solid var(--border2);border-radius:4px;color:var(--text-mid);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.95rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;}
+        .modal-confirm{padding:0.65rem 1.5rem;background:var(--red);border:none;border-radius:4px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.95rem;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;}
+
+        @media(max-width:768px){
+            .header-inner{flex-wrap:wrap;height:auto;padding:0.75rem 1rem;gap:0.75rem;}
+            nav{width:100%;overflow-x:auto;}
+            .nav-btn{height:48px;padding:0 0.75rem;font-size:0.85rem;flex-shrink:0;}
+            main{padding:1.5rem 1rem;}
+            .recipe-grid{grid-template-columns:1fr;}
+            .portal-tag{display:none;}
+        }
+        ::-webkit-scrollbar{width:6px;height:6px;}
+        ::-webkit-scrollbar-track{background:var(--bg);}
+        ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-container">
-            <div class="logo">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Beeker's Garage & Parts Logo" style="display: none;" />
-                <div style="background: #2d5016; padding: 1rem 2rem; border-radius: 12px; border: 3px solid #dc2626; position: relative;">
-                    <div style="color: white; font-family: serif; font-size: 2rem; font-style: italic; text-align: center; margin-bottom: 0.25rem;">Beeker's</div>
-                    <div style="color: white; font-family: sans-serif; font-size: 1.5rem; font-weight: bold; letter-spacing: 3px; text-align: center; margin-bottom: 0.25rem;">GARAGE</div>
-                    <div style="color: #dc2626; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; letter-spacing: 2px; text-align: center;">&amp; PARTS</div>
-                    <!-- Red accent lines -->
-                    <div style="position: absolute; top: 8px; left: 8px; right: 8px; height: 3px; background: #dc2626; border-radius: 2px;"></div>
-                    <div style="position: absolute; bottom: 8px; left: 8px; right: 8px; height: 3px; background: #dc2626; border-radius: 2px;"></div>
-                </div>
+
+<header class="header">
+    <div class="header-inner">
+        <a class="wordmark" href="#">
+            <span class="wordmark-badge">LC&nbsp;RP</span>
+            <div class="wordmark-main">
+                <div class="wordmark-top">Beeker's</div>
+                <div class="wordmark-bottom">GARAGE</div>
             </div>
-            <nav class="nav-tabs">
-                <button class="nav-tab" onclick="showPage('calculator')">Crafting Calculator</button>
-                <button class="nav-tab active" onclick="showPage('invoice')">Invoice Calculator</button>
-                <button class="nav-tab" onclick="showPage('employees')">Employee Hub</button>
-            </nav>
+        </a>
+        <nav>
+            <button class="nav-btn" onclick="showPage('calculator',this)">⚙️ Crafting</button>
+            <button class="nav-btn active" onclick="showPage('invoice',this)">🧾 Invoice</button>
+            <button class="nav-btn" onclick="showPage('directory',this)">👥 Directory</button>
+            <button class="nav-btn" onclick="showPage('boss',this)">🔒 Boss</button>
+        </nav>
+        <span class="portal-tag">EMPLOYEE PORTAL // INTERNAL USE ONLY</span>
+    </div>
+</header>
+
+<main>
+
+<!-- ═══ CRAFTING ═══ -->
+<div id="calculator" class="page">
+    <div class="section-label"><h2>Crafting Planner</h2><span class="label-meta">PASSWORD PROTECTED</span></div>
+
+    <!-- Lock screen -->
+    <div class="panel boss-lock" id="craft-lock">
+        <div style="font-size:2.5rem">🔒</div>
+        <h3>Management Access Only</h3>
+        <div class="boss-pw-row">
+            <input type="password" class="boss-pw-input" id="craft-pw" placeholder="Enter password" onkeypress="craftEnter(event)">
+            <button class="boss-unlock-btn" onclick="unlockCraft()">Unlock</button>
         </div>
-    </header>
+        <div class="boss-pw-err" id="craft-pw-err">Incorrect password.</div>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Crafting Calculator Page -->
-        <div id="calculator" class="page">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">🔧</div>
-                    <h1 class="card-title">Crafting Planner</h1>
+    <!-- Crafting content -->
+    <div id="craft-content" style="display:none">
+    <div class="panel">
+        <div class="panel-title">Recipes</div>
+        <div class="recipe-grid">
+            <div class="recipe-card">
+                <div class="recipe-card-stripe stripe-teal"></div>
+                <div class="recipe-top">
+                    <span class="recipe-name-text">Large Repair Kit</span>
+                    <input type="number" class="recipe-qty-input" id="repair-kit-input" min="0" value="0" oninput="calcMats()">
                 </div>
-
-                <div class="recipe-grid">
-                    <!-- Scrap Recipe -->
-                    <div class="recipe-card">
-                        <div class="recipe-header">
-                            <div class="recipe-icon">
-                                <img src="https://i.imgur.com/UYd5yVq.png" alt="Scrap" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="recipe-name">Scrap</div>
-                            <input type="number" class="recipe-input" id="scrap-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
-                        </div>
-                        <div class="recipe-materials">
-                            <div class="material-req">
-                                <span class="material-icon recyclable">♻️</span>
-                                <span>3 Recyclable Each</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Large Repair Kit Recipe -->
-                    <div class="recipe-card repair-kit">
-                        <div class="recipe-header">
-                            <div class="recipe-icon">
-                                <img src="https://i.imgur.com/q9Tpbd3.png" alt="Repair Kit" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="recipe-name">Large Repair Kit</div>
-                            <input type="number" class="recipe-input" id="repair-kit-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
-                        </div>
-                        <div class="recipe-materials">
-                            <div class="material-req">
-                                <span class="material-icon recyclable">♻️</span>
-                                <span>90 Recyclable</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon electronics">⚡</span>
-                                <span>6 Electronics</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon steel">⚙️</span>
-                                <span>30 Steel</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon wire">🔌</span>
-                                <span>24 Wire</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon glass">💎</span>
-                                <span>21 Glass</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon rubber">⚫</span>
-                                <span>9 Rubber</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Heavy Cutter Recipe -->
-                    <div class="recipe-card heavy-cutter">
-                        <div class="recipe-header">
-                            <div class="recipe-icon">
-                                <img src="https://i.imgur.com/bdnTrGE.png" alt="Heavy Cutters" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="recipe-name">Heavy Cutter</div>
-                            <input type="number" class="recipe-input" id="heavy-cutter-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
-                        </div>
-                        <div class="recipe-materials">
-                            <div class="material-req">
-                                <span class="material-icon recyclable">♻️</span>
-                                <span>120 Recyclable</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon titanium">🔩</span>
-                                <span>2 Titanium</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon steel">⚙️</span>
-                                <span>24 Steel</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon">🗑️</span>
-                                <span>75 Scrap</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon rubber">⚫</span>
-                                <span>21 Rubber</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Advanced Lockpick Recipe -->
-                    <div class="recipe-card advanced">
-                        <div class="recipe-header">
-                            <div class="recipe-icon">
-                                <img src="https://i.imgur.com/Xq2pWH2.png" alt="Advanced Lockpick" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="recipe-name">Advanced Lockpick</div>
-                            <input type="number" class="recipe-input" id="lockpick-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
-                        </div>
-                        <div class="recipe-materials">
-                            <div class="material-req">
-                                <span class="material-icon recyclable">♻️</span>
-                                <span>180 Recyclable</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon aluminum">🔘</span>
-                                <span>60 Aluminum</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon">🗑️</span>
-                                <span>60 Scrap</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon plastic">🧊</span>
-                                <span>60 Plastic</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Manhole Remover Recipe -->
-                    <div class="recipe-card legendary">
-                        <div class="recipe-header">
-                            <div class="recipe-icon">
-                                <img src="https://i.imgur.com/Eyu0kJq.png" alt="Manhole Remover" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                            <div class="recipe-name">Manhole Remover</div>
-                            <input type="number" class="recipe-input" id="manhole-input" min="0" value="0" placeholder="Qty" oninput="calculateTotalMaterials()">
-                        </div>
-                        <div class="recipe-materials">
-                            <div class="material-req">
-                                <span class="material-icon recyclable">♻️</span>
-                                <span>300 Recyclable</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon titanium">🔩</span>
-                                <span>10 Titanium</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon">🗑️</span>
-                                <span>45 Scrap</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon aluminum">🔘</span>
-                                <span>150 Aluminum</span>
-                            </div>
-                            <div class="material-req">
-                                <span class="material-icon steel">⚙️</span>
-                                <span>105 Steel</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="mat-tags">
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#f59e0b"></span>5 Electronics</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#6b7280"></span>25 Steel</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#ef4444"></span>25 Wire</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#06b6d4"></span>25 Glass</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#374151"></span>10 Rubber</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#22c55e"></span>= 90 Recyclable</span>
                 </div>
             </div>
-
-            <!-- Total Materials Needed -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">📋</div>
-                    <h1 class="card-title">Total Materials Needed</h1>
+            <div class="recipe-card">
+                <div class="recipe-card-stripe stripe-green"></div>
+                <div class="recipe-top">
+                    <span class="recipe-name-text">Heavy Cutter</span>
+                    <input type="number" class="recipe-qty-input" id="heavy-cutter-input" min="0" value="0" oninput="calcMats()">
                 </div>
-                
-                <div style="background: linear-gradient(135deg, #e3f2fd, #f8f9fa); border: 2px solid #2196f3; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2196f3, #1976d2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">💡</div>
-                        <h3 style="color: #1565c0; margin: 0; font-size: 1.1rem; font-weight: 600;">Recycling Center Guide</h3>
-                    </div>
-                    <p style="margin: 0; color: #424242; line-height: 1.5;">The quantities shown below are what you enter into the laptop at the recycling center for each material type.</p>
+                <div class="mat-tags">
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#6b7280"></span>8 Steel</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#78716c"></span>25 Scrap</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#374151"></span>7 Rubber</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#9ca3af"></span>2 Titanium</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#22c55e"></span>= 40 Recyclable</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#9ca3af"></span>+ 2 Titanium</span>
                 </div>
-                
-                <div class="totals-grid">
-                    <div class="total-item">
-                        <div class="total-icon recyclable">♻️</div>
-                        <div class="total-name">Recyclable Materials</div>
-                        <div class="total-quantity" id="total-recyclables">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon electronics">⚡</div>
-                        <div class="total-name">Electronics</div>
-                        <div class="total-quantity" id="total-electronics">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon steel">⚙️</div>
-                        <div class="total-name">Steel</div>
-                        <div class="total-quantity" id="total-steel">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon wire">🔌</div>
-                        <div class="total-name">Wire</div>
-                        <div class="total-quantity" id="total-wire">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon glass">💎</div>
-                        <div class="total-name">Glass</div>
-                        <div class="total-quantity" id="total-glass">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon rubber">⚫</div>
-                        <div class="total-name">Rubber</div>
-                        <div class="total-quantity" id="total-rubber">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon">🗑️</div>
-                        <div class="total-name">Scrap</div>
-                        <div class="total-quantity" id="total-scrap">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon titanium">🔩</div>
-                        <div class="total-name">Titanium</div>
-                        <div class="total-quantity" id="total-titanium">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon aluminum">🔘</div>
-                        <div class="total-name">Aluminum</div>
-                        <div class="total-quantity" id="total-aluminum">0</div>
-                    </div>
-                    <div class="total-item">
-                        <div class="total-icon plastic">🧊</div>
-                        <div class="total-name">Plastic</div>
-                        <div class="total-quantity" id="total-plastic">0</div>
-                    </div>
+            </div>
+            <div class="recipe-card">
+                <div class="recipe-card-stripe stripe-purple"></div>
+                <div class="recipe-top">
+                    <span class="recipe-name-text">Advanced Lockpick</span>
+                    <input type="number" class="recipe-qty-input" id="lockpick-input" min="0" value="0" oninput="calcMats()">
+                </div>
+                <div class="mat-tags">
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#d1d5db"></span>30 Aluminum</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#78716c"></span>30 Scrap</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#06b6d4"></span>30 Plastic</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#22c55e"></span>= 90 Recyclable</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <div class="recipe-card-stripe stripe-amber"></div>
+                <div class="recipe-top">
+                    <span class="recipe-name-text">Manhole Remover</span>
+                    <input type="number" class="recipe-qty-input" id="manhole-input" min="0" value="0" oninput="calcMats()">
+                </div>
+                <div class="mat-tags">
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#78716c"></span>25 Scrap</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#d1d5db"></span>75 Aluminum</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#6b7280"></span>55 Steel</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#9ca3af"></span>15 Titanium</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#22c55e"></span>= 155 Recyclable</span>
+                    <span class="mat-tag"><span class="mat-tag-dot" style="background:#9ca3af"></span>+ 15 Titanium</span>
                 </div>
             </div>
         </div>
-
-        <!-- Invoice Calculator Page -->
-        <div id="invoice" class="page active">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">🧾</div>
-                    <h1 class="card-title">Service Invoice Calculator</h1>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
-                    <!-- Service Input -->
-                    <div>
-                        <div style="background: linear-gradient(135deg, #e3f2fd, #f8f9fa); border: 2px solid #2196f3; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
-                            <h3 style="color: #1565c0; margin: 0 0 1rem 0; font-size: 1.1rem; font-weight: 600;">Add Service</h3>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Service Type</label>
-                                <select id="service-type" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" onchange="togglePriceInput()">
-                                    <option value="">Select Service</option>
-                                    <option value="car-upgrades">Car Upgrades</option>
-                                    <option value="degradation">Degradation</option>
-                                </select>
-                            </div>
-
-                            <div id="stock-price-section" style="margin-bottom: 1rem; display: none;">
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Stock Price ($)</label>
-                                <input type="number" id="stock-price" placeholder="Enter stock price" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" oninput="calculateUpgradePrice()" onkeypress="handleEnterKey(event, 'car-upgrades')" min="0" step="0.01">
-                                <div id="upgrade-price" style="margin-top: 0.5rem; padding: 0.5rem; background: #e8f5e8; border-radius: 6px; font-weight: 600; color: #2d5016; display: none;">
-                                    Invoice Price: $<span id="upgrade-amount">0</span>
-                                </div>
-                            </div>
-
-                            <div id="scrap-amount-section" style="margin-bottom: 1rem; display: none;">
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Scrap Required</label>
-                                <input type="number" id="scrap-amount" placeholder="Enter scrap amount" style="width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem;" oninput="calculateDegradationPrice()" onkeypress="handleEnterKey(event, 'degradation')" min="0">
-                                <div id="degradation-price" style="margin-top: 0.5rem; padding: 0.5rem; background: #fff3cd; border-radius: 6px; font-weight: 600; color: #856404; display: none;">
-                                    Invoice Price: $<span id="degradation-amount">0</span>
-                                </div>
-                            </div>
-
-                            <button onclick="addServiceToInvoice()" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #4a7c2a, #2d5016); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
-                                Add to Invoice
-                            </button>
-                        </div>
-
-                        <!-- Quick Service Buttons -->
-                        <div style="background: var(--light-gray); border-radius: 12px; padding: 1.5rem;">
-                            <h4 style="margin: 0 0 1rem 0; color: var(--beeker-green); font-weight: 600;">Quick Add Items</h4>
-                            
-                            <div style="margin-bottom: 1rem;">
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Quantity</label>
-                                <input type="number" id="quick-quantity" value="1" min="1" style="width: 100px; padding: 0.5rem; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 1rem; text-align: center;">
-                            </div>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                                <button onclick="addQuickItemWithQuantity('Repair Kit', 600)" style="padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Repair Kit - $600</button>
-                                <button onclick="addQuickItemWithQuantity('Advanced Lockpick', 1250)" style="padding: 0.75rem; background: #6f42c1; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Advanced Lockpick - $1,250</button>
-                                <button onclick="addQuickItemWithQuantity('Heavy Cutters', 700)" style="padding: 0.75rem; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Heavy Cutters - $700</button>
-                                <button onclick="addQuickItemWithQuantity('Manhole Remover', 3000)" style="padding: 0.75rem; background: #fd7e14; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Manhole Remover - $3,000</button>
-                                <button onclick="addQuickItemWithQuantity('Lithium', 50)" style="padding: 0.75rem; background: #17a2b8; color: white; border: none; border-radius: 6px; font-weight: 500; cursor: pointer;">Add Lithium - $50</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Invoice Display -->
-                    <div>
-                        <div style="background: var(--white); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--light-gray);">
-                                <h3 style="color: var(--beeker-green); margin: 0; font-size: 1.2rem; font-weight: 700;">INVOICE</h3>
-                                <button onclick="clearInvoice()" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; cursor: pointer;">Clear All</button>
-                            </div>
-                            
-                            <div id="invoice-items" style="min-height: 200px;">
-                                <div style="text-align: center; color: #666; padding: 2rem; font-style: italic;">
-                                    No items in invoice
-                                </div>
-                            </div>
-
-                            <div style="border-top: 2px solid var(--beeker-green); padding-top: 1rem; margin-top: 1rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; font-weight: 700; color: var(--beeker-green);">
-                                    <span>TOTAL:</span>
-                                    <span id="invoice-total">$0</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Free Repair Counter -->
-                        <div style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem; margin-top: 1rem;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 0.75rem;">
-                                    <div style="width: 32px; height: 32px; background: var(--beeker-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: white;">🔧</div>
-                                    <span style="font-weight: 600; color: var(--beeker-green); font-size: 1.1rem;">Free Repairs Available:</span>
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <button id="repair-down" style="width: 32px; height: 32px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; user-select: none;" onmousedown="startDecrementing()" onmouseup="stopAdjusting()" onmouseleave="stopAdjusting()" ontouchstart="startDecrementing()" ontouchend="stopAdjusting()">▼</button>
-                                    <input type="number" id="repair-counter" value="0" min="0" style="font-size: 1.5rem; font-weight: 700; color: var(--beeker-green); width: 80px; text-align: center; background: white; border: 2px solid var(--beeker-green); border-radius: 6px; padding: 0.25rem 0.5rem; -moz-appearance: textfield;" oninput="updateRepairCounterFromInput()">
-                                    <button id="repair-up" style="width: 32px; height: 32px; background: var(--beeker-green); color: white; border: none; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; user-select: none;" onmousedown="startIncrementing()" onmouseup="stopAdjusting()" onmouseleave="stopAdjusting()" ontouchstart="startIncrementing()" ontouchend="stopAdjusting()">▲</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="panel">
+        <div class="panel-title">Total Materials Needed</div>
+        <div class="info-banner">💡 Enter these quantities into the recycling center laptop per material type.</div>
+        <div class="totals-grid">
+            <div class="total-card"><div class="total-dot" style="background:#14532d">♻️</div><span class="total-label">Recyclable</span><span class="total-val" id="total-recyclables">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#78350f">⚡</div><span class="total-label">Electronics</span><span class="total-val" id="total-electronics">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#1c1917">⚙️</div><span class="total-label">Steel</span><span class="total-val" id="total-steel">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#7f1d1d">🔌</div><span class="total-label">Wire</span><span class="total-val" id="total-wire">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#0c4a6e">💎</div><span class="total-label">Glass</span><span class="total-val" id="total-glass">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#111827">⚫</div><span class="total-label">Rubber</span><span class="total-val" id="total-rubber">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#292524">🗑️</div><span class="total-label">Scrap</span><span class="total-val" id="total-scrap">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#1e293b">🔩</div><span class="total-label">Titanium</span><span class="total-val" id="total-titanium">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#374151">🔘</div><span class="total-label">Aluminum</span><span class="total-val" id="total-aluminum">0</span></div>
+            <div class="total-card"><div class="total-dot" style="background:#0c4a6e">🧊</div><span class="total-label">Plastic</span><span class="total-val" id="total-plastic">0</span></div>
         </div>
+    </div>
+    </div><!-- /craft-content -->
+</div>
 
-        <!-- Employee Hub Page -->
-        <div id="employees" class="page">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">👥</div>
-                    <h1 class="card-title">Employee Directory</h1>
-                </div>
-
-                <!-- Staff Summary Bar -->
-                <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border: 2px solid var(--beeker-green); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 2.5rem; font-weight: 700; color: var(--beeker-green);">38</div>
-                            <div style="font-size: 0.9rem; color: #666; font-weight: 500;">Total Staff</div>
-                        </div>
-                        <div style="height: 40px; width: 2px; background: var(--medium-gray);"></div>
-                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #ffed4e);"></div>
-                                <span style="font-weight: 600; color: #8b6914;">1 Owner</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #6f42c1, #e83e8c);"></div>
-                                <span style="font-weight: 600; color: #6f42c1;">5 Head Mechanics</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background: var(--beeker-green);"></div>
-                                <span style="font-weight: 600; color: var(--beeker-green);">10 Senior Mechanics</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                <div style="width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #6c757d, #868e96);"></div>
-                                <span style="font-weight: 600; color: #6c757d;">22 Mechanics</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-employees">38</div>
-                        <div class="stat-label">Total Employees</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="head-mechanics-count">5</div>
-                        <div class="stat-label">Head Mechanics</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="senior-count">10</div>
-                        <div class="stat-label">Senior Mechanics</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="mechanic-count">22</div>
-                        <div class="stat-label">Mechanics</div>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <input type="text" class="search-input" id="employee-search" placeholder="Search employees..." oninput="filterEmployees()">
-                    <select class="filter-select" id="rank-filter" onchange="filterEmployees()">
-                        <option value="">All Ranks</option>
-                        <option value="Owner">Owner</option>
-                        <option value="Head Mechanic">Head Mechanic</option>
-                        <option value="Senior Mechanic">Senior Mechanic</option>
-                        <option value="Mechanic">Mechanic</option>
-                        <option value="Trial Mechanic">Trial Mechanic</option>
-                        <option value="Towie">Towie</option>
+<!-- ═══ INVOICE ═══ -->
+<div id="invoice" class="page active">
+    <div class="section-label"><h2>Invoice Calculator</h2><span class="label-meta">ITEMS SAVED LOCALLY</span></div>
+    <div class="invoice-layout">
+        <div>
+            <div class="mechanic-selector">
+                <label for="active-mechanic">Active Mechanic</label>
+                <select id="active-mechanic" onchange="updateActiveMechanic()">
+                    <option value="">— Select your name —</option>
+                </select>
+                <span class="active-mechanic-badge" id="active-badge" style="display:none">
+                    <span class="active-dot"></span><span id="active-badge-name"></span>
+                </span>
+            </div>
+            <div class="panel">
+                <div class="panel-title">Add Service</div>
+                <div class="field-group">
+                    <label class="field-label" for="service-type">Service Type</label>
+                    <select class="field-select" id="service-type" onchange="togglePriceInput()">
+                        <option value="">— Select —</option>
+                        <option value="repair">Car Repair</option>
+                        <option value="car-upgrades">Car Upgrades</option>
+                        <option value="degradation">Degradation</option>
                     </select>
                 </div>
-
-                <div class="employee-grid" id="employee-grid">
-                    <!-- Employees will be populated by JavaScript -->
+                <div id="repair-section" class="field-group" style="display:none">
+                    <label class="field-label" for="repair-materials">Materials Used</label>
+                    <input type="number" class="field-input" id="repair-materials" placeholder="0" min="0" oninput="calcRepair()" onkeypress="enterAdd(event)">
+                    <div class="calc-preview" id="repair-price">Invoice → $<span id="repair-amount">0</span> <span style="color:var(--text-dim);font-size:0.75rem">(mats × $10 + $100 flat)</span></div>
+                </div>
+                <div id="stock-price-section" class="field-group" style="display:none">
+                    <label class="field-label" for="stock-price">Stock Price ($)</label>
+                    <input type="number" class="field-input" id="stock-price" placeholder="0.00" min="0" step="0.01" oninput="calcUpgrade()" onkeypress="enterAdd(event)">
+                    <div class="calc-preview" id="upgrade-price">Invoice → $<span id="upgrade-amount">0</span></div>
+                </div>
+                <div id="scrap-amount-section" class="field-group" style="display:none">
+                    <label class="field-label" for="scrap-amount">Scrap Required</label>
+                    <input type="number" class="field-input" id="scrap-amount" placeholder="0" min="0" oninput="calcDegradation()" onkeypress="enterAdd(event)">
+                    <div class="calc-preview" id="degradation-price">Invoice → $<span id="degradation-amount">0</span></div>
+                </div>
+                <button class="btn btn-primary" onclick="addService()">+ Add to Invoice</button>
+            </div>
+            <div class="panel">
+                <div class="panel-title">Quick Add</div>
+                <div class="field-group" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                    <label class="field-label" style="margin:0;white-space:nowrap;">Qty</label>
+                    <input type="number" id="quick-quantity" value="1" min="1" class="field-input" style="width:80px;">
+                </div>
+                <div class="quick-grid">
+                    <button class="quick-btn" onclick="quickAdd('Screwdriver Set',100)">Screwdriver Set<span class="quick-btn-price">$100 ea.</span></button>
+                    <button class="quick-btn" onclick="quickAdd('Large Repair Kit',800)">Large Repair Kit<span class="quick-btn-price">$800 ea.</span></button>
+                    <button class="quick-btn" onclick="quickAdd('Heavy Cutters',800)">Heavy Cutters<span class="quick-btn-price">$800 ea.</span></button>
+                    <button class="quick-btn" onclick="quickAdd('Advanced Lockpick',1750)">Adv. Lockpick<span class="quick-btn-price">$1,750 ea.</span></button>
+                    <button class="quick-btn" onclick="quickAdd('Manhole Remover',3000)">Manhole Remover<span class="quick-btn-price">$3,000 ea.</span></button>
                 </div>
             </div>
         </div>
-    </main>
-
-    <script>
-        // Employee data with correct ranks
-        const employees = [
-            // Owner
-            { name: "Marvin Rodicinal", rank: "Owner" },
-            
-            // Head Mechanic
-            { name: "Ali Monky", rank: "Head Mechanic" },
-            { name: "JP Purp", rank: "Head Mechanic" },
-            { name: "Rod Purp", rank: "Head Mechanic" },
-            { name: "Doom Dollas", rank: "Head Mechanic" },
-            { name: "Santos Dollas", rank: "Head Mechanic" },
-            
-            // Senior Mechanic
-            { name: "Licked Behave", rank: "Senior Mechanic" },
-            { name: "Anita Fajita", rank: "Senior Mechanic" },
-            { name: "Carlito Jarito", rank: "Senior Mechanic" },
-            { name: "David Brooks", rank: "Senior Mechanic" },
-            { name: "Dec Behave", rank: "Senior Mechanic" },
-            { name: "Donnie Blaze", rank: "Senior Mechanic" },
-            { name: "Leo Broderick", rank: "Senior Mechanic" },
-            { name: "Luie Lemmon", rank: "Senior Mechanic" },
-            { name: "Samantha Bellum", rank: "Senior Mechanic" },
-            { name: "Ben RizzoKraves", rank: "Senior Mechanic" },
-            
-            // Mechanic (everyone else including former trials)
-            { name: "Amanda Tess", rank: "Mechanic" },
-            { name: "Benjamin Dejo", rank: "Mechanic" },
-            { name: "Big Red", rank: "Mechanic" },
-            { name: "Caleb Garcia", rank: "Mechanic" },
-            { name: "Clyde Foster", rank: "Mechanic" },
-            { name: "Erik Menendez", rank: "Mechanic" },
-            { name: "James Edmonton", rank: "Mechanic" },
-            { name: "Jimmy Earnhardt", rank: "Mechanic" },
-            { name: "Joshua Tess", rank: "Mechanic" },
-            { name: "Jovan Behavovich", rank: "Mechanic" },
-            { name: "Kain Garcia", rank: "Mechanic" },
-            { name: "Maverick Mitchell", rank: "Mechanic" },
-            { name: "Pablo Garcia", rank: "Mechanic" },
-            { name: "Rainer Behave", rank: "Mechanic" },
-            { name: "Sanity Nix", rank: "Mechanic" },
-            { name: "Tonih Blaze", rank: "Mechanic" },
-            { name: "Bird Cortair", rank: "Mechanic" },
-            { name: "Amir VuittonTrainor", rank: "Mechanic" },
-            { name: "Dean VuittonTrainor", rank: "Mechanic" },
-            { name: "Joe Miller", rank: "Mechanic" },
-            { name: "Sofia Rizzo", rank: "Mechanic" },
-            { name: "Delilah Moon", rank: "Mechanic" }
-        ];
-
-        // Invoice Calculator Functions
-        let invoiceItems = [];
-        let invoiceCounter = 1;
-        let repairCounter = 0;
-        let adjustInterval = null;
-        let adjustTimeout = null;
-
-        // Load data from localStorage on page load
-        function loadSavedData() {
-            const savedInvoice = localStorage.getItem('beekers-invoice');
-            const savedCounter = localStorage.getItem('beekers-counter');
-            const savedInvoiceCounter = localStorage.getItem('beekers-invoice-counter');
-            
-            if (savedInvoice) {
-                invoiceItems = JSON.parse(savedInvoice);
-                updateInvoiceDisplay();
-            }
-            
-            if (savedCounter) {
-                repairCounter = parseInt(savedCounter);
-                document.getElementById('repair-counter').value = repairCounter;
-            }
-            
-            if (savedInvoiceCounter) {
-                invoiceCounter = parseInt(savedInvoiceCounter);
-            }
-        }
-
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem('beekers-invoice', JSON.stringify(invoiceItems));
-            localStorage.setItem('beekers-counter', repairCounter.toString());
-            localStorage.setItem('beekers-invoice-counter', invoiceCounter.toString());
-        }
-
-        // Free Repair Counter Functions
-        function startIncrementing() {
-            incrementRepairCounter();
-            adjustTimeout = setTimeout(() => {
-                adjustInterval = setInterval(incrementRepairCounter, 100);
-            }, 500); // Start fast increment after 500ms hold
-        }
-
-        function startDecrementing() {
-            decrementRepairCounter();
-            adjustTimeout = setTimeout(() => {
-                adjustInterval = setInterval(decrementRepairCounter, 100);
-            }, 500); // Start fast decrement after 500ms hold
-        }
-
-        function stopAdjusting() {
-            clearTimeout(adjustTimeout);
-            clearInterval(adjustInterval);
-            adjustTimeout = null;
-            adjustInterval = null;
-        }
-
-        function incrementRepairCounter() {
-            repairCounter++;
-            document.getElementById('repair-counter').value = repairCounter;
-            saveData();
-        }
-
-        function decrementRepairCounter() {
-            if (repairCounter > 0) {
-                repairCounter--;
-                document.getElementById('repair-counter').value = repairCounter;
-                saveData();
-            }
-        }
-
-        function updateRepairCounterFromInput() {
-            const input = document.getElementById('repair-counter');
-            const value = parseInt(input.value) || 0;
-            repairCounter = Math.max(0, value); // Ensure it's not negative
-            input.value = repairCounter; // Update display in case user entered negative
-            saveData();
-        }
-
-        function handleEnterKey(event, serviceType) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                addServiceToInvoice();
-            }
-        }
-
-        function togglePriceInput() {
-            const serviceType = document.getElementById('service-type').value;
-            const stockSection = document.getElementById('stock-price-section');
-            const scrapSection = document.getElementById('scrap-amount-section');
-            
-            // Hide both sections first
-            stockSection.style.display = 'none';
-            scrapSection.style.display = 'none';
-            document.getElementById('upgrade-price').style.display = 'none';
-            document.getElementById('degradation-price').style.display = 'none';
-            
-            // Show relevant section
-            if (serviceType === 'car-upgrades') {
-                stockSection.style.display = 'block';
-            } else if (serviceType === 'degradation') {
-                scrapSection.style.display = 'block';
-            }
-            
-            // Clear inputs
-            document.getElementById('stock-price').value = '';
-            document.getElementById('scrap-amount').value = '';
-        }
-
-        function calculateUpgradePrice() {
-            const stockPrice = parseFloat(document.getElementById('stock-price').value) || 0;
-            const invoicePrice = stockPrice * 1.5;
-            
-            document.getElementById('upgrade-amount').textContent = invoicePrice.toFixed(2);
-            document.getElementById('upgrade-price').style.display = stockPrice > 0 ? 'block' : 'none';
-        }
-
-        function calculateDegradationPrice() {
-            const scrapAmount = parseInt(document.getElementById('scrap-amount').value) || 0;
-            const invoicePrice = scrapAmount * 40;
-            
-            document.getElementById('degradation-amount').textContent = invoicePrice.toFixed(2);
-            document.getElementById('degradation-price').style.display = scrapAmount > 0 ? 'block' : 'none';
-        }
-
-        function addServiceToInvoice() {
-            const serviceType = document.getElementById('service-type').value;
-            
-            if (!serviceType) {
-                alert('Please select a service type');
-                return;
-            }
-            
-            let serviceName = '';
-            let price = 0;
-            let description = '';
-            
-            if (serviceType === 'car-upgrades') {
-                const stockPrice = parseFloat(document.getElementById('stock-price').value);
-                if (!stockPrice || stockPrice <= 0) {
-                    alert('Please enter a valid stock price');
-                    return;
-                }
-                
-                serviceName = 'Car Upgrade';
-                price = stockPrice * 1.5;
-                description = `Stock Price: ${stockPrice.toFixed(2)} × 1.5`;
-                
-            } else if (serviceType === 'degradation') {
-                const scrapAmount = parseInt(document.getElementById('scrap-amount').value);
-                if (!scrapAmount || scrapAmount <= 0) {
-                    alert('Please enter a valid scrap amount');
-                    return;
-                }
-                
-                serviceName = 'Degradation Repair';
-                price = scrapAmount * 40;
-                description = `${scrapAmount} Scrap × $40`;
-            }
-            
-            // Add to invoice
-            const item = {
-                id: invoiceCounter++,
-                name: serviceName,
-                description: description,
-                price: price
-            };
-            
-            invoiceItems.push(item);
-            updateInvoiceDisplay();
-            saveData();
-            
-            // Clear form
-            document.getElementById('service-type').value = '';
-            document.getElementById('stock-price').value = '';
-            document.getElementById('scrap-amount').value = '';
-            togglePriceInput();
-        }
-
-        function addQuickItemWithQuantity(itemName, unitPrice) {
-            const quantity = parseInt(document.getElementById('quick-quantity').value) || 1;
-            const totalPrice = unitPrice * quantity;
-            
-            const item = {
-                id: invoiceCounter++,
-                name: quantity > 1 ? `${itemName} (x${quantity})` : itemName,
-                description: quantity > 1 ? `${unitPrice} × ${quantity}` : 'Standard Rate',
-                price: totalPrice
-            };
-            
-            invoiceItems.push(item);
-            updateInvoiceDisplay();
-            saveData();
-        }
-
-        function addQuickItem(itemName, price) {
-            // Check if item already exists in invoice
-            const existingItem = invoiceItems.find(item => item.baseItemName === itemName);
-            
-            if (existingItem) {
-                // Update existing item
-                existingItem.quantity += 1;
-                existingItem.price = existingItem.unitPrice * existingItem.quantity;
-                existingItem.name = existingItem.quantity > 1 ? `${itemName} (x${existingItem.quantity})` : itemName;
-                existingItem.description = existingItem.quantity > 1 ? `${existingItem.unitPrice} × ${existingItem.quantity}` : 'Standard Rate';
-            } else {
-                // Create new item
-                const item = {
-                    id: invoiceCounter++,
-                    baseItemName: itemName,
-                    name: itemName,
-                    description: 'Standard Rate',
-                    price: price,
-                    unitPrice: price,
-                    quantity: 1
-                };
-                invoiceItems.push(item);
-            }
-            
-            updateInvoiceDisplay();
-        }
-
-        function removeInvoiceItem(itemId) {
-            invoiceItems = invoiceItems.filter(item => item.id !== itemId);
-            updateInvoiceDisplay();
-            saveData();
-        }
-
-        function updateInvoiceDisplay() {
-            const container = document.getElementById('invoice-items');
-            
-            if (invoiceItems.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #666; padding: 2rem; font-style: italic;">No items in invoice</div>';
-                document.getElementById('invoice-total').textContent = '$0';
-                return;
-            }
-            
-            let html = '';
-            let total = 0;
-            
-            invoiceItems.forEach(item => {
-                total += item.price;
-                html += `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--light-gray); border-radius: 8px; margin-bottom: 0.75rem;">
-                        <div>
-                            <div style="font-weight: 600; color: var(--beeker-green);">${item.name}</div>
-                            <div style="font-size: 0.9rem; color: #666;">${item.description}</div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <span style="font-weight: 700; font-size: 1.1rem;">${item.price.toFixed(2)}</span>
-                            <button onclick="removeInvoiceItem(${item.id})" style="background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">✕</button>
-                        </div>
+        <div>
+            <div class="invoice-display">
+                <div class="invoice-header-row">
+                    <span class="invoice-heading">Invoice</span>
+                    <div style="display:flex;gap:0.5rem;">
+                        <button class="btn" style="background:var(--green-dim);color:#86efac;border:1px solid var(--green);" onclick="sendInvoice()">✓ Send Invoice</button>
+                        <button class="btn btn-danger" onclick="clearInvoice()">Clear</button>
                     </div>
-                `;
+                </div>
+                <div id="invoice-items"><div class="inv-empty">// No items added yet</div></div>
+                <div class="invoice-total-row">
+                    <span class="inv-total-label">Total</span>
+                    <span class="inv-total-amt" id="invoice-total">$0.00</span>
+                </div>
+            </div>
+            <div class="repair-counter-wrap">
+                <span class="repair-label">🔧 Free Repairs Available</span>
+                <div class="counter-controls">
+                    <button class="counter-btn minus" onmousedown="startDecrement()" onmouseup="stopAdj()" onmouseleave="stopAdj()" ontouchstart="startDecrement()" ontouchend="stopAdj()">−</button>
+                    <input type="number" class="counter-display" id="repair-counter" value="0" min="0" oninput="updateCounter()">
+                    <button class="counter-btn plus" onmousedown="startIncrement()" onmouseup="stopAdj()" onmouseleave="stopAdj()" ontouchstart="startIncrement()" ontouchend="stopAdj()">+</button>
+                </div>
+            </div>
+
+            <!-- Who's In -->
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1.25rem;margin-top:1rem;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.85rem;display:flex;align-items:center;gap:0.5rem;">
+                    <span class="active-dot"></span> On Shift
+                </div>
+                <div id="invoice-whos-in"><div style="color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.75rem;text-align:center;padding:0.5rem 0;">Nobody clocked in.</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ DIRECTORY ═══ -->
+<div id="directory" class="page">
+    <div class="section-label"><h2>Employee Directory</h2><span class="label-meta">LUCID CITY RP</span></div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="dir-layout">
+        <div class="clockin-panel">
+            <div class="panel-title" style="margin-bottom:1rem;">Clock In / Out</div>
+            <label class="field-label" for="clockin-name">Your Name</label>
+            <select class="clockin-name-select" id="clockin-name" onchange="updateClockBtn()">
+                <option value="">— Select name —</option>
+            </select>
+            <button class="clockin-btn in" id="clockin-btn" onclick="toggleClock()">Clock In</button>
+            <div class="shift-log">
+                <div class="shift-log-title">Today's Shifts</div>
+                <div id="shift-log-list"><div class="no-shifts">No shifts recorded yet.</div></div>
+            </div>
+        </div>
+        <div>
+            <div class="emp-controls">
+                <input type="text" class="emp-search" id="employee-search" placeholder="Search by name…" oninput="filterEmployees()">
+                <select class="rank-select" id="rank-filter" onchange="filterEmployees()">
+                    <option value="">All Ranks</option>
+                    <option value="Owner">Owner</option>
+                    <option value="Head Mechanic">Head Mechanic</option>
+                    <option value="Legacy Mechanic">Legacy Mechanic</option>
+                    <option value="Senior Mechanic">Senior Mechanic</option>
+                    <option value="Mechanic">Mechanic</option>
+                    <option value="Trial Mechanic">Trial Mechanic</option>
+                    <option value="Towie">Towie</option>
+                </select>
+            </div>
+            <div class="employee-grid" id="employee-grid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ BOSS VIEW ═══ -->
+<div id="boss" class="page">
+    <div class="section-label"><h2>Boss View</h2><span class="label-meta">PASSWORD PROTECTED</span></div>
+    <div class="panel boss-lock" id="boss-lock">
+        <div style="font-size:2.5rem">🔒</div>
+        <h3>Management Access Only</h3>
+        <div class="boss-pw-row">
+            <input type="password" class="boss-pw-input" id="boss-pw" placeholder="Enter password" onkeypress="bossEnter(event)">
+            <button class="boss-unlock-btn" onclick="unlockBoss()">Unlock</button>
+        </div>
+        <div class="boss-pw-err" id="boss-pw-err">Incorrect password.</div>
+    </div>
+    <div class="boss-content" id="boss-content">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+            <button class="btn btn-ghost" onclick="lockBoss()">🔒 Lock</button>
+        </div>
+        <div class="boss-tabs">
+            <button class="boss-tab active" onclick="showBossTab('revenue',this)">Revenue</button>
+            <button class="boss-tab" onclick="showBossTab('profits',this)">Profits</button>
+            <button class="boss-tab" onclick="showBossTab('clocked',this)">Who's In</button>
+            <button class="boss-tab" onclick="showBossTab('shifts',this)">Shift History</button>
+        </div>
+        <div class="boss-section active" id="btab-revenue">
+            <div class="boss-summary-grid" id="boss-summary"></div>
+            <div class="panel">
+                <div class="panel-title">Invoices by Mechanic</div>
+                <div id="boss-invoices"></div>
+            </div>
+        </div>
+        <div class="boss-section" id="btab-profits">
+            <div class="boss-summary-grid" id="profit-summary"></div>
+            <div class="panel">
+                <div class="panel-title">Profit Breakdown by Mechanic</div>
+                <div id="profit-breakdown"></div>
+            </div>
+        </div>
+        <div class="boss-section" id="btab-clocked">
+            <div class="panel">
+                <div class="panel-title">Currently Clocked In</div>
+                <div class="clocked-in-list" id="clocked-in-list"></div>
+                <div id="clocked-in-empty" style="display:none;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.8rem;text-align:center;padding:1.5rem 0;">Nobody is clocked in right now.</div>
+            </div>
+        </div>
+        <div class="boss-section" id="btab-shifts">
+            <div class="panel">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                    <div class="panel-title" style="margin:0">All Shift History</div>
+                    <button class="boss-clear-btn" onclick="clearAllShifts()">Clear History</button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="shift-history-table">
+                        <thead><tr><th>Employee</th><th>Clock In</th><th>Clock Out</th><th>Duration</th></tr></thead>
+                        <tbody id="shift-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal" style="display:none">
+    <div class="modal-box">
+        <div class="modal-title" id="modal-title">Are you sure?</div>
+        <div class="modal-msg" id="modal-msg"></div>
+        <div class="modal-btns">
+            <button class="modal-cancel" onclick="modalCancel()">Cancel</button>
+            <button class="modal-confirm" id="modal-confirm-btn">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ── DATA ── */
+const employees = [
+    { name:"Marvin Rodicinal",  rank:"Owner" },
+    { name:"JP Purp",           rank:"Owner" },
+    { name:"Rod Purp",          rank:"Head Mechanic" },
+    { name:"Ali Monky",         rank:"Head Mechanic" },
+    { name:"Marvel Krasnova",   rank:"Head Mechanic" },
+    { name:"Doom Dollas",       rank:"Legacy Mechanic" },
+    { name:"Carlito Jarito",    rank:"Senior Mechanic" },
+    { name:"Anita Fajita",      rank:"Senior Mechanic" },
+    { name:"Josue Perez",       rank:"Mechanic" },
+    { name:"Craig Homes",       rank:"Trial Mechanic" },
+    { name:"Ben ShiestyKraves", rank:"Trial Mechanic" },
+    { name:"Chicken Joe",       rank:"Trial Mechanic" },
+    { name:"Clyde Foster",      rank:"Trial Mechanic" },
+    { name:"David Brooks",      rank:"Trial Mechanic" },
+    { name:"Erik Menendez",     rank:"Trial Mechanic" },
+    { name:"Frank Sizzler",     rank:"Trial Mechanic" },
+    { name:"Fredrick Murphy",   rank:"Trial Mechanic" },
+    { name:"George McBride",    rank:"Trial Mechanic" },
+    { name:"Gordo Waxfeen",     rank:"Trial Mechanic" },
+    { name:"Harry Grey",        rank:"Trial Mechanic" },
+    { name:"Johnny Hems",       rank:"Trial Mechanic" },
+    { name:"Jordan Banks",      rank:"Trial Mechanic" },
+    { name:"Lana Love",         rank:"Trial Mechanic" },
+    { name:"Luie Lemmon",       rank:"Trial Mechanic" },
+    { name:"Luka Michaels",     rank:"Trial Mechanic" },
+    { name:"Maeve Collins",     rank:"Trial Mechanic" },
+    { name:"Meelo Jones",       rank:"Trial Mechanic" },
+    { name:"Roux Garcia",       rank:"Trial Mechanic" },
+    { name:"Ryan Hernandez",    rank:"Trial Mechanic" },
+    { name:"Sanity Cherry",     rank:"Trial Mechanic" },
+    { name:"Jimmy Bellum",      rank:"Trial Mechanic" },
+];
+
+const rankBadge = {
+    'Owner':'badge-owner','Head Mechanic':'badge-head','Legacy Mechanic':'badge-legacy',
+    'Senior Mechanic':'badge-senior','Mechanic':'badge-mech',
+    'Trial Mechanic':'badge-trial','Towie':'badge-towie'
+};
+
+const BOSS_PW = 'beeker2025';
+
+/* ── STATE ── */
+let invoiceItems=[], invoiceCounter=1, repairCounter=0;
+let adjInterval=null, adjTimeout=null;
+let activeMechanic='';
+let empInvoices={};   // {name:[{id,name,desc,price,ts}]}
+let shifts=[];        // [{name,clockIn,clockOut}]
+let clockedIn={};     // {name:timestamp}
+
+/* ── PERSIST ── */
+function save() {
+    try {
+        localStorage.setItem('bg2-inv',    JSON.stringify(invoiceItems));
+        localStorage.setItem('bg2-cnt',    repairCounter.toString());
+        localStorage.setItem('bg2-ic',     invoiceCounter.toString());
+        localStorage.setItem('bg2-empinv', JSON.stringify(empInvoices));
+        localStorage.setItem('bg2-shifts', JSON.stringify(shifts));
+        localStorage.setItem('bg2-ci',     JSON.stringify(clockedIn));
+        localStorage.setItem('bg2-am',     activeMechanic);
+    } catch(e){}
+}
+function load() {
+    try {
+        const a=localStorage.getItem('bg2-inv'),    b=localStorage.getItem('bg2-cnt'),
+              c=localStorage.getItem('bg2-ic'),     d=localStorage.getItem('bg2-empinv'),
+              e=localStorage.getItem('bg2-shifts'), f=localStorage.getItem('bg2-ci'),
+              g=localStorage.getItem('bg2-am');
+        if(a) invoiceItems=JSON.parse(a);
+        if(b) repairCounter=parseInt(b);
+        if(c) invoiceCounter=parseInt(c);
+        if(d){
+            empInvoices=JSON.parse(d);
+            // Migrate: drop any old flat-item records that predate the invoice-record format
+            Object.keys(empInvoices).forEach(k=>{
+                empInvoices[k]=empInvoices[k].filter(r=>r.invoiceTotal!==undefined);
             });
-            
-            container.innerHTML = html;
-            document.getElementById('invoice-total').textContent = `${total.toFixed(2)}`;
         }
+        if(e) shifts=JSON.parse(e);
+        if(f) clockedIn=JSON.parse(f);
+        if(g) activeMechanic=g;
+    } catch(e){}
+}
 
-        function clearInvoice() {
-            invoiceItems = [];
-            updateInvoiceDisplay();
-            saveData();
-        }
+/* ── NAV ── */
+function showPage(id,btn) {
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if(btn) btn.classList.add('active');
+    if(id==='boss') renderBossContent();
+    if(id==='directory'){ renderShiftLog(); renderEmployees(); }
+    // Re-lock crafting if navigating away
+    if(id!=='calculator'){
+        document.getElementById('craft-lock').style.display='flex';
+        document.getElementById('craft-content').style.display='none';
+        document.getElementById('craft-pw-err').style.display='none';
+    }
+}
 
-        // Page Navigation
-        function showPage(pageId) {
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            // Remove active class from all nav tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
-            
-            // Activate corresponding nav tab
-            event.target.classList.add('active');
-        }
+/* ── CRAFTING ── */
+function calcMats() {
+    const rk=n('repair-kit-input'), hc=n('heavy-cutter-input'),
+          lp=n('lockpick-input'),   mh=n('manhole-input');
+    const elec=rk*5, steel=rk*25+hc*8+mh*55, wire=rk*25, glass=rk*25,
+          rubber=rk*10+hc*7, scrap=hc*25+lp*30+mh*25,
+          alum=lp*30+mh*75, plastic=lp*30, titan=hc*2+mh*15;
+    const rec=elec+steel+wire+glass+rubber+scrap+alum+plastic;
+    st('total-recyclables',rec); st('total-electronics',elec); st('total-steel',steel);
+    st('total-wire',wire); st('total-glass',glass); st('total-rubber',rubber);
+    st('total-scrap',scrap); st('total-titanium',titan); st('total-aluminum',alum); st('total-plastic',plastic);
+}
+const n=id=>parseInt(document.getElementById(id).value)||0;
+const st=(id,v)=>document.getElementById(id).textContent=v;
 
-        // Crafting Calculator - New Planning System
-        function calculateTotalMaterials() {
-            // Get quantities wanted
-            const scrapQty = parseInt(document.getElementById('scrap-input').value) || 0;
-            const repairKitQty = parseInt(document.getElementById('repair-kit-input').value) || 0;
-            const heavyCutterQty = parseInt(document.getElementById('heavy-cutter-input').value) || 0;
-            const lockpickQty = parseInt(document.getElementById('lockpick-input').value) || 0;
-            const manholeQty = parseInt(document.getElementById('manhole-input').value) || 0;
-            
-            // Calculate total materials needed
-            let totalRecyclables = 0;
-            let totalElectronics = 0;
-            let totalSteel = 0;
-            let totalWire = 0;
-            let totalGlass = 0;
-            let totalRubber = 0;
-            let totalScrap = 0;
-            let totalTitanium = 0;
-            let totalAluminum = 0;
-            let totalPlastic = 0;
-            
-            // Scrap: 3 recyclables each
-            totalRecyclables += scrapQty * 3;
-            
-            // Large Repair Kit: 90 recyclables + 6 electronics + 30 steel + 24 wire + 21 glass + 9 rubber
-            totalRecyclables += repairKitQty * 90;
-            totalElectronics += repairKitQty * 6;
-            totalSteel += repairKitQty * 30;
-            totalWire += repairKitQty * 24;
-            totalGlass += repairKitQty * 21;
-            totalRubber += repairKitQty * 9;
-            
-            // Heavy Cutter: 2 titanium + 24 steel + 75 scrap + 21 rubber (totals 120 recyclables worth)
-            totalTitanium += heavyCutterQty * 2;
-            totalSteel += heavyCutterQty * 24;
-            totalScrap += heavyCutterQty * 75;
-            totalRubber += heavyCutterQty * 21;
-            // Total recyclable cost is 120 per heavy cutter
-            totalRecyclables += heavyCutterQty * 120;
-            
-            // Advanced Lockpick: 180 recyclables + 60 aluminum + 60 scrap + 60 plastic
-            totalRecyclables += lockpickQty * 180;
-            totalAluminum += lockpickQty * 60;
-            totalScrap += lockpickQty * 60;
-            totalPlastic += lockpickQty * 60;
-            
-            // Manhole Remover: 300 recyclables + 10 titanium + 45 scrap + 150 aluminum + 105 steel
-            totalRecyclables += manholeQty * 300;
-            totalTitanium += manholeQty * 10;
-            totalScrap += manholeQty * 45;
-            totalAluminum += manholeQty * 150;
-            totalSteel += manholeQty * 105;
-            
-            // Update display
-            document.getElementById('total-recyclables').textContent = totalRecyclables;
-            document.getElementById('total-electronics').textContent = totalElectronics;
-            document.getElementById('total-steel').textContent = totalSteel;
-            document.getElementById('total-wire').textContent = totalWire;
-            document.getElementById('total-glass').textContent = totalGlass;
-            document.getElementById('total-rubber').textContent = totalRubber;
-            document.getElementById('total-scrap').textContent = totalScrap;
-            document.getElementById('total-titanium').textContent = totalTitanium;
-            document.getElementById('total-aluminum').textContent = totalAluminum;
-            document.getElementById('total-plastic').textContent = totalPlastic;
-        }
+/* ── MECHANIC SELECTS ── */
+function populateSelects() {
+    const opts = employees.map(e=>`<option value="${e.name}">${e.name} — ${e.rank}</option>`).join('');
+    ['active-mechanic','clockin-name'].forEach(id=>{
+        const el=document.getElementById(id);
+        const placeholder=id==='active-mechanic'?'— Select your name —':'— Select name —';
+        el.innerHTML=`<option value="">${placeholder}</option>`+opts;
+    });
+    if(activeMechanic){
+        document.getElementById('active-mechanic').value=activeMechanic;
+        updateActiveMechanic(false);
+    }
+    updateClockBtn();
+}
 
-        // Employee Management
-        function renderEmployees(employeesToRender = employees) {
-            const grid = document.getElementById('employee-grid');
-            grid.innerHTML = '';
-            
-            employeesToRender.forEach(employee => {
-                const card = document.createElement('div');
-                card.className = 'employee-card';
-                
-                const rankClass = employee.rank.toLowerCase().replace(/\s+/g, '-');
-                
-                card.innerHTML = `
-                    <div class="employee-name">${employee.name}</div>
-                    <span class="employee-rank rank-${rankClass}">${employee.rank}</span>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
+function updateActiveMechanic(doSave=true) {
+    activeMechanic=document.getElementById('active-mechanic').value;
+    const badge=document.getElementById('active-badge');
+    if(activeMechanic){
+        badge.style.display='inline-flex';
+        document.getElementById('active-badge-name').textContent=activeMechanic;
+    } else { badge.style.display='none'; }
+    if(doSave) save();
+}
 
-        function filterEmployees() {
-            const searchTerm = document.getElementById('employee-search').value.toLowerCase();
-            const rankFilter = document.getElementById('rank-filter').value;
-            
-            let filtered = employees.filter(employee => {
-                const matchesSearch = employee.name.toLowerCase().includes(searchTerm);
-                const matchesRank = !rankFilter || employee.rank === rankFilter;
-                return matchesSearch && matchesRank;
-            });
-            
-            renderEmployees(filtered);
-        }
+/* ── INVOICE ── */
+function togglePriceInput() {
+    const t=document.getElementById('service-type').value;
+    document.getElementById('repair-section').style.display      =t==='repair'      ?'block':'none';
+    document.getElementById('stock-price-section').style.display =t==='car-upgrades'?'block':'none';
+    document.getElementById('scrap-amount-section').style.display=t==='degradation' ?'block':'none';
+    ['repair-price','upgrade-price','degradation-price'].forEach(id=>document.getElementById(id).style.display='none');
+    ['repair-materials','stock-price','scrap-amount'].forEach(id=>document.getElementById(id).value='');
+}
+function calcRepair(){const m=n('repair-materials'),el=document.getElementById('repair-price');if(m>0){document.getElementById('repair-amount').textContent=(m*10+100).toFixed(2);el.style.display='block';}else el.style.display='none';}
+function calcUpgrade(){const s=parseFloat(document.getElementById('stock-price').value)||0,el=document.getElementById('upgrade-price');if(s>0){document.getElementById('upgrade-amount').textContent=(s*1.5).toFixed(2);el.style.display='block';}else el.style.display='none';}
+function calcDegradation(){const s=n('scrap-amount'),el=document.getElementById('degradation-price');if(s>0){document.getElementById('degradation-amount').textContent=(s*40).toFixed(2);el.style.display='block';}else el.style.display='none';}
+function enterAdd(e){if(e.key==='Enter')addService();}
 
-        function updateStats() {
-            const ranks = employees.reduce((acc, emp) => {
-                acc[emp.rank] = (acc[emp.rank] || 0) + 1;
-                return acc;
-            }, {});
-            
-            document.getElementById('total-employees').textContent = employees.length;
-            document.getElementById('head-mechanics-count').textContent = ranks['Head Mechanic'] || 0;
-            document.getElementById('senior-count').textContent = ranks['Senior Mechanic'] || 0;
-            document.getElementById('mechanic-count').textContent = ranks['Mechanic'] || 0;
-        }
+function addService() {
+    const t=document.getElementById('service-type').value;
+    if(!t) return alert('Please select a service type.');
+    let name,price,desc;
+    if(t==='repair'){
+        const m=n('repair-materials'); if(!m||m<=0) return alert('Enter a valid materials amount.');
+        name='Car Repair'; price=m*10+100; desc=`${m} materials × $10 + $100 flat fee`;
+    } else if(t==='car-upgrades'){
+        const s=parseFloat(document.getElementById('stock-price').value); if(!s||s<=0) return alert('Enter a valid stock price.');
+        name='Car Upgrade'; price=s*1.5; desc=`Stock $${s.toFixed(2)} × 1.5`;
+        const item={id:invoiceCounter++,name,desc,price,serviceType:t,stockPrice:s,ts:Date.now()};
+        invoiceItems.push(item);
+        renderInvoice(); save();
+        document.getElementById('service-type').value='';
+        ['repair-materials','stock-price','scrap-amount'].forEach(id=>document.getElementById(id).value='');
+        togglePriceInput();
+        return;
+    } else {
+        const s=n('scrap-amount'); if(!s||s<=0) return alert('Enter a valid scrap amount.');
+        name='Degradation Repair'; price=s*40; desc=`${s} Scrap × $40`;
+    }
+    const item={id:invoiceCounter++,name,desc,price,serviceType:t,ts:Date.now()};
+    invoiceItems.push(item);
+    renderInvoice(); save();
+    document.getElementById('service-type').value='';
+    ['repair-materials','stock-price','scrap-amount'].forEach(id=>document.getElementById(id).value='');
+    togglePriceInput();
+}
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSavedData(); // Load saved data first
-            calculateTotalMaterials();
-            renderEmployees();
-            updateStats();
-        });
-    </script>
+function quickAdd(itemName,unitPrice) {
+    const qty=parseInt(document.getElementById('quick-quantity').value)||1;
+    const existing=invoiceItems.find(i=>i.baseItemName===itemName);
+    let item;
+    if(existing){
+        existing.quantity=(existing.quantity||1)+qty;
+        existing.price=existing.unitPrice*existing.quantity;
+        existing.name=existing.quantity>1?`${itemName} ×${existing.quantity}`:itemName;
+        existing.desc=existing.quantity>1?`$${unitPrice} × ${existing.quantity}`:'Standard Rate';
+        item=existing;
+    } else {
+        item={id:invoiceCounter++,baseItemName:itemName,unitPrice,quantity:qty,
+              name:qty>1?`${itemName} ×${qty}`:itemName,
+              desc:qty>1?`$${unitPrice} × ${qty}`:'Standard Rate',
+              price:unitPrice*qty,serviceType:'items-sold',ts:Date.now()};
+        invoiceItems.push(item);
+    }
+    renderInvoice(); save();
+}
+
+function removeItem(id) {
+    invoiceItems=invoiceItems.filter(i=>i.id!==id);
+    renderInvoice(); save();
+}
+function sendInvoice() {
+    if(!invoiceItems.length) return alert('No items in the invoice.');
+    if(!activeMechanic) return alert('Select your name as Active Mechanic before sending.');
+
+    // Calculate totals for this invoice
+    const invoiceTotal = invoiceItems.reduce((s,i)=>s+i.price, 0);
+    // Stock cost = sum of stockPrice on any upgrade items
+    const stockCost = invoiceItems.reduce((s,i)=>s+(i.stockPrice||0), 0);
+    const profit = invoiceTotal - stockCost;
+    // Commission = 5% of upgrade invoice amounts only
+    const upgradeTotal = invoiceItems.filter(i=>i.serviceType==='car-upgrades').reduce((s,i)=>s+i.price,0);
+    const commission = upgradeTotal * 0.05;
+
+    // Bundle into a single invoice record
+    const record = {
+        id: invoiceCounter++,
+        ts: Date.now(),
+        items: invoiceItems.map(i=>({...i})),
+        invoiceTotal,
+        stockCost,
+        profit,
+        commission,
+        upgradeTotal,
+    };
+
+    if(!empInvoices[activeMechanic]) empInvoices[activeMechanic]=[];
+    empInvoices[activeMechanic].push(record);
+
+    invoiceItems=[];
+    renderInvoice();
+    save();
+
+    const btn=document.querySelector('[onclick="sendInvoice()"]');
+    const orig=btn.textContent;
+    btn.textContent='✓ Sent!';
+    btn.style.background='var(--green)'; btn.style.color='#000';
+    setTimeout(()=>{ btn.textContent=orig; btn.style.background='var(--green-dim)'; btn.style.color='#86efac'; },1500);
+}
+
+function clearInvoice(){ invoiceItems=[]; renderInvoice(); save(); }
+
+function renderInvoice() {
+    const c=document.getElementById('invoice-items'), t=document.getElementById('invoice-total');
+    if(!invoiceItems.length){ c.innerHTML='<div class="inv-empty">// No items added yet</div>'; t.textContent='$0.00'; return; }
+    let total=0,html='';
+    invoiceItems.forEach(item=>{ total+=item.price;
+        html+=`<div class="inv-row"><div><div class="inv-row-name">${item.name}</div><div class="inv-row-meta">${item.desc||''}</div></div><span class="inv-row-price">$${item.price.toFixed(2)}</span><button class="inv-remove" onclick="removeItem(${item.id})">✕</button></div>`;
+    });
+    c.innerHTML=html; t.textContent=`$${total.toFixed(2)}`;
+}
+
+function startIncrement(){increment();adjTimeout=setTimeout(()=>{adjInterval=setInterval(increment,80);},450);}
+function startDecrement(){decrement();adjTimeout=setTimeout(()=>{adjInterval=setInterval(decrement,80);},450);}
+function stopAdj(){clearTimeout(adjTimeout);clearInterval(adjInterval);adjTimeout=adjInterval=null;}
+function increment(){repairCounter++;document.getElementById('repair-counter').value=repairCounter;save();}
+function decrement(){if(repairCounter>0){repairCounter--;document.getElementById('repair-counter').value=repairCounter;save();}}
+function updateCounter(){const v=parseInt(document.getElementById('repair-counter').value)||0;repairCounter=Math.max(0,v);document.getElementById('repair-counter').value=repairCounter;save();}
+
+/* ── DIRECTORY ── */
+function renderStats() {
+    const c=employees.reduce((a,e)=>{a[e.rank]=(a[e.rank]||0)+1;return a;},{});
+    const tiles=[
+        {cls:'all',   label:'Total Staff',    val:employees.length,           color:'var(--text-mid)'},
+        {cls:'owner', label:'Owner',           val:c['Owner']||0,              color:'var(--gold)'},
+        {cls:'head',  label:'Head Mechanics',  val:c['Head Mechanic']||0,      color:'var(--purple)'},
+        {cls:'legacy',label:'Legacy',          val:c['Legacy Mechanic']||0,    color:'#f97316'},
+        {cls:'senior',label:'Senior',          val:c['Senior Mechanic']||0,    color:'var(--green)'},
+        {cls:'mech',  label:'Mechanics',       val:c['Mechanic']||0,           color:'var(--amber)'},
+        {cls:'trial', label:'Trial Mechanics', val:c['Trial Mechanic']||0,     color:'#fb923c'},
+    ];
+    document.getElementById('stats-row').innerHTML=tiles.map(t=>
+        `<div class="stat-tile ${t.cls}"><div class="stat-num" style="color:${t.color}">${t.val}</div><div class="stat-lbl">${t.label}</div></div>`
+    ).join('');
+}
+
+function renderEmployees(list=employees) {
+    document.getElementById('employee-grid').innerHTML=list.map(e=>{
+        const ci=clockedIn[e.name];
+        return `<div class="emp-card">
+            <div class="emp-card-left">
+                <div class="emp-name">${e.name}</div>
+                <div class="emp-status ${ci?'clocked-in':'clocked-out'}">${ci?'● CLOCKED IN':'○ off duty'}</div>
+            </div>
+            <span class="emp-rank-badge ${rankBadge[e.rank]||'badge-mech'}">${e.rank}</span>
+        </div>`;
+    }).join('');
+}
+function filterEmployees(){
+    const q=document.getElementById('employee-search').value.toLowerCase();
+    const r=document.getElementById('rank-filter').value;
+    renderEmployees(employees.filter(e=>e.name.toLowerCase().includes(q)&&(!r||e.rank===r)));
+}
+
+/* ── CLOCK IN/OUT ── */
+function updateClockBtn() {
+    const name=document.getElementById('clockin-name').value;
+    const btn=document.getElementById('clockin-btn');
+    if(!name){ btn.textContent='Clock In'; btn.className='clockin-btn in'; return; }
+    if(clockedIn[name]){ btn.textContent='Clock Out'; btn.className='clockin-btn out'; }
+    else { btn.textContent='Clock In'; btn.className='clockin-btn in'; }
+}
+
+function renderWhosIn() {
+    const el = document.getElementById('invoice-whos-in');
+    if (!el) return;
+    const active = Object.entries(clockedIn);
+    if (!active.length) {
+        el.innerHTML = '<div style="color:var(--text-dim);font-family:\'Share Tech Mono\',monospace;font-size:0.75rem;text-align:center;padding:0.5rem 0;">Nobody clocked in.</div>';
+        return;
+    }
+    el.innerHTML = active.map(([name, ts]) => {
+        const emp = employees.find(e => e.name === name);
+        const rank = emp ? emp.rank : '';
+        const duration = fd(Date.now() - ts);
+        return `<div style="display:flex;align-items:center;justify-content:space-between;padding:0.45rem 0.6rem;background:var(--surface3);border-radius:4px;margin-bottom:0.35rem;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite;display:inline-block;"></span>
+                <span style="font-weight:600;font-size:0.85rem;">${name}</span>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--green);">${duration}</div>
+                <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--text-dim);">${rank}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleClock() {
+    const name=document.getElementById('clockin-name').value;
+    if(!name) return alert('Please select your name first.');
+    if(clockedIn[name]) {
+        const shift=shifts.find(s=>s.name===name&&s.clockOut===null);
+        if(shift) shift.clockOut=Date.now();
+        delete clockedIn[name];
+    } else {
+        clockedIn[name]=Date.now();
+        shifts.push({name,clockIn:Date.now(),clockOut:null});
+    }
+    updateClockBtn(); save(); renderShiftLog(); renderEmployees(); renderWhosIn();
+}
+
+function renderShiftLog() {
+    const today=new Date(); today.setHours(0,0,0,0);
+    const list=shifts.filter(s=>s.clockIn>=today.getTime()).slice().reverse();
+    const el=document.getElementById('shift-log-list');
+    if(!list.length){ el.innerHTML='<div class="no-shifts">No shifts recorded yet.</div>'; return; }
+    el.innerHTML=list.map(s=>`
+        <div class="shift-entry">
+            <div class="shift-name">${s.name}</div>
+            <div class="shift-times">IN: ${ft(s.clockIn)} ${s.clockOut
+                ?`&nbsp;|&nbsp; OUT: ${ft(s.clockOut)} &nbsp;<span class="shift-duration">${fd(s.clockOut-s.clockIn)}</span>`
+                :'&nbsp;<span class="shift-active">● ACTIVE</span>'}</div>
+        </div>`).join('');
+}
+
+const ft=ts=>new Date(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+const fdt=ts=>new Date(ts).toLocaleString([],{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+const fd=ms=>{ const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000); return h>0?`${h}h ${m}m`:`${m}m`; };
+
+/* ── BOSS VIEW ── */
+function craftEnter(e){ if(e.key==='Enter') unlockCraft(); }
+function unlockCraft(){
+    if(document.getElementById('craft-pw').value===BOSS_PW){
+        document.getElementById('craft-lock').style.display='none';
+        document.getElementById('craft-content').style.display='block';
+        document.getElementById('craft-pw').value='';
+    } else {
+        document.getElementById('craft-pw-err').style.display='block';
+        document.getElementById('craft-pw').value='';
+    }
+}
+
+function bossEnter(e){if(e.key==='Enter')unlockBoss();}
+function unlockBoss(){
+    if(document.getElementById('boss-pw').value===BOSS_PW){
+        document.getElementById('boss-lock').style.display='none';
+        document.getElementById('boss-content').classList.add('unlocked');
+        renderBossContent();
+    } else {
+        document.getElementById('boss-pw-err').style.display='block';
+        document.getElementById('boss-pw').value='';
+    }
+}
+function lockBoss(){
+    document.getElementById('boss-lock').style.display='flex';
+    document.getElementById('boss-content').classList.remove('unlocked');
+    document.getElementById('boss-pw').value='';
+    document.getElementById('boss-pw-err').style.display='none';
+}
+function showBossTab(id,btn){
+    document.querySelectorAll('.boss-section').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.boss-tab').forEach(b=>b.classList.remove('active'));
+    document.getElementById('btab-'+id).classList.add('active');
+    btn.classList.add('active');
+}
+function renderBossContent(){ renderRevenue(); renderProfits(); renderClockedIn(); renderShiftTable(); }
+
+function renderProfits(){
+    let totalRevenue=0, totalStockCost=0, totalProfit=0, totalCommission=0;
+
+    Object.values(empInvoices).forEach(records=>records.forEach(r=>{
+        totalRevenue  += r.invoiceTotal;
+        totalStockCost+= r.stockCost||0;
+        totalProfit   += r.profit||0;
+        totalCommission+=r.commission||0;
+    }));
+
+    const netProfit = totalProfit - totalCommission;
+
+    document.getElementById('profit-summary').innerHTML=`
+        <div class="bsg-card"><div class="bsg-val">$${totalRevenue.toFixed(2)}</div><div class="bsg-lbl">Total Revenue</div></div>
+        <div class="bsg-card"><div class="bsg-val" style="color:var(--red)">−$${totalStockCost.toFixed(2)}</div><div class="bsg-lbl">Total Stock Cost</div></div>
+        <div class="bsg-card"><div class="bsg-val" style="color:var(--green)">$${totalProfit.toFixed(2)}</div><div class="bsg-lbl">Gross Profit</div></div>
+        <div class="bsg-card commission-card"><div class="bsg-val">−$${totalCommission.toFixed(2)}</div><div class="bsg-lbl">Commission Owed (5%)</div></div>
+        <div class="bsg-card" style="border-color:var(--green)"><div class="bsg-val" style="color:var(--green);font-size:2rem">$${netProfit.toFixed(2)}</div><div class="bsg-lbl">Net Profit (after commission)</div></div>`;
+
+    const entries=employees.map(e=>{
+        const records=empInvoices[e.name]||[];
+        const revenue   =records.reduce((s,r)=>s+r.invoiceTotal,0);
+        const stockCost =records.reduce((s,r)=>s+(r.stockCost||0),0);
+        const profit    =records.reduce((s,r)=>s+(r.profit||0),0);
+        const commission=records.reduce((s,r)=>s+(r.commission||0),0);
+        const net=profit-commission;
+        return {emp:e,records,revenue,stockCost,profit,commission,net};
+    }).filter(x=>x.records.length>0).sort((a,b)=>b.net-a.net);
+
+    const container=document.getElementById('profit-breakdown');
+    if(!entries.length){ container.innerHTML='<div class="inv-empty" style="height:60px">No data yet.</div>'; return; }
+
+    container.innerHTML=`
+        <div style="display:grid;grid-template-columns:1fr repeat(4,auto);gap:0.5rem;padding:0.5rem 0.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid var(--border);">
+            <span>Mechanic</span>
+            <span style="text-align:right">Revenue</span>
+            <span style="text-align:right;color:var(--red)">Stock Cost</span>
+            <span style="text-align:right;color:#f59e0b">Commission</span>
+            <span style="text-align:right;color:var(--green)">Net Profit</span>
+        </div>
+        ${entries.map(({emp,revenue,stockCost,commission,net})=>`
+        <div style="display:grid;grid-template-columns:1fr repeat(4,auto);gap:0.5rem;padding:0.75rem;border-bottom:1px solid var(--border);align-items:center;">
+            <div>
+                <div style="font-weight:600;font-size:0.9rem;">${emp.name}</div>
+                <div style="font-size:0.72rem;color:var(--text-dim);letter-spacing:0.05em;">${emp.rank}</div>
+            </div>
+            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--text);">$${revenue.toFixed(2)}</div>
+            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--red);">−$${stockCost.toFixed(2)}</div>
+            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:#f59e0b;">−$${commission.toFixed(2)}</div>
+            <div style="text-align:right;font-family:'Share Tech Mono',monospace;font-size:0.95rem;font-weight:700;color:var(--green);">$${net.toFixed(2)}</div>
+        </div>`).join('')}`;
+}
+
+function renderClockedIn(){
+    const el=document.getElementById('clocked-in-list');
+    const emptyEl=document.getElementById('clocked-in-empty');
+    const active=Object.entries(clockedIn);
+    if(!active.length){
+        el.innerHTML=''; el.style.display='none';
+        emptyEl.style.display='block'; return;
+    }
+    el.style.display='grid'; emptyEl.style.display='none';
+    el.innerHTML=active.map(([name,ts])=>{
+        const emp=employees.find(e=>e.name===name);
+        const rank=emp?emp.rank:'';
+        const duration=fd(Date.now()-ts);
+        return `<div class="cil-card">
+            <span class="cil-dot"></span>
+            <div>
+                <div class="cil-name">${name}</div>
+                <div class="cil-since">${rank} · Since ${ft(ts)} (${duration})</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function renderRevenue(){
+    const COMMISSION_RATE = 0.05;
+
+    // Aggregate across all mechanics' invoice records
+    let totalRev=0, totalCommission=0, totalUpgradeRev=0, totalRecords=0;
+    Object.values(empInvoices).forEach(records=>records.forEach(r=>{
+        totalRev+=r.invoiceTotal;
+        totalUpgradeRev+=r.upgradeTotal||0;
+        totalCommission+=r.commission||0;
+        totalRecords++;
+    }));
+
+    document.getElementById('boss-summary').innerHTML=`
+        <div class="bsg-card"><div class="bsg-val">$${totalRev.toFixed(2)}</div><div class="bsg-lbl">Total Revenue</div></div>
+        <div class="bsg-card"><div class="bsg-val">$${totalUpgradeRev.toFixed(2)}</div><div class="bsg-lbl">Upgrade Revenue</div></div>
+        <div class="bsg-card commission-card"><div class="bsg-val">$${totalCommission.toFixed(2)}</div><div class="bsg-lbl">Total Commission Owed (5%)</div></div>
+        <div class="bsg-card"><div class="bsg-val">${totalRecords}</div><div class="bsg-lbl">Invoices Sent</div></div>`;
+
+    const entries=employees.map(e=>{
+        const records=empInvoices[e.name]||[];
+        const total=records.reduce((s,r)=>s+r.invoiceTotal,0);
+        const upgradeRev=records.reduce((s,r)=>s+(r.upgradeTotal||0),0);
+        const commission=records.reduce((s,r)=>s+(r.commission||0),0);
+        return {emp:e,records,total,upgradeRev,commission};
+    }).filter(x=>x.records.length>0).sort((a,b)=>b.total-a.total);
+
+    const container=document.getElementById('boss-invoices');
+    if(!entries.length){ container.innerHTML='<div class="inv-empty" style="height:60px">No invoices recorded yet.</div>'; return; }
+
+    container.innerHTML=entries.map(({emp,records,total,upgradeRev,commission})=>{
+        const sid=emp.name.replace(/\s/g,'-');
+        const commBadge=commission>0?`<span class="commission-badge">★ $${commission.toFixed(2)} commission</span>`:'';
+        return `<div class="emp-invoice-row" id="eir-${sid}">
+            <div class="emp-invoice-header" onclick="document.getElementById('eir-${sid}').classList.toggle('open')">
+                <div>
+                    <div class="eih-name">${emp.name}${commBadge}</div>
+                    <div class="eih-rank">${emp.rank}</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="eih-total">$${total.toFixed(2)}</div>
+                    <div class="eih-count">${records.length} invoice${records.length!==1?'s':''} sent</div>
+                </div>
+                <span class="eih-chevron">▼</span>
+            </div>
+            <div class="emp-invoice-body">
+                <div class="mech-breakdown">
+                    <div class="mbd-cell upgrades"><div class="mbd-val">$${upgradeRev.toFixed(2)}</div><div class="mbd-lbl">Upgrade Revenue</div></div>
+                    <div class="mbd-cell repairs"><div class="mbd-val">$${(total-upgradeRev).toFixed(2)}</div><div class="mbd-lbl">Other Revenue</div></div>
+                    <div class="mbd-cell commission"><div class="mbd-val">$${commission.toFixed(2)}</div><div class="mbd-lbl">Commission (5%)</div></div>
+                    <div class="mbd-cell items"><div class="mbd-val">${records.length}</div><div class="mbd-lbl">Invoices Sent</div></div>
+                </div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.5rem;">Invoice Log</div>
+                ${records.slice().reverse().map(r=>{
+                    const ritems = r.items||[];
+                    const commNote=r.commission>0?`<span style="color:#f59e0b;font-size:0.7rem;margin-left:0.5rem;">→ $${(r.commission||0).toFixed(2)} comm.</span>`:'';
+                    return `<div class="emp-inv-item" style="flex-direction:column;align-items:stretch;gap:0.35rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div class="emp-inv-item-name">Invoice — ${ritems.length} item${ritems.length!==1?'s':''}${commNote}</div>
+                                <div class="emp-inv-item-desc">${fdt(r.ts||Date.now())}${(r.stockCost||0)>0?` · Stock cost: $${(r.stockCost||0).toFixed(2)}`:''}</div>
+                            </div>
+                            <div style="text-align:right">
+                                <div class="emp-inv-item-price">$${(r.invoiceTotal||r.price||0).toFixed(2)}</div>
+                                <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--green)">+$${(r.profit||r.price||0).toFixed(2)} profit</div>
+                            </div>
+                        </div>
+                        ${ritems.length>0?`<div style="padding-left:0.5rem;border-left:2px solid var(--border2);">
+                            ${ritems.map(i=>{
+                                const typeColor=i.serviceType==='car-upgrades'?'var(--purple)':i.serviceType==='items-sold'?'var(--green)':'var(--cyan)';
+                                const typeLabel=i.serviceType==='car-upgrades'?'Upgrade':i.serviceType==='repair'?'Repair':i.serviceType==='degradation'?'Degradation':'Item';
+                                return `<div style="display:flex;justify-content:space-between;font-size:0.78rem;padding:0.2rem 0;color:var(--text-mid);">
+                                    <span>${i.name} <span style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:${typeColor};border:1px solid ${typeColor};border-radius:2px;padding:0.05rem 0.25rem;">${typeLabel}</span></span>
+                                    <span style="font-family:'Share Tech Mono',monospace;">$${(i.price||0).toFixed(2)}</span>
+                                </div>`;
+                            }).join('')}
+                        </div>`:''}
+                    </div>`;
+                }).join('')}
+                <button class="emp-inv-clear" onclick="clearEmpInv('${emp.name}')">Clear ${emp.name}'s History</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+/* ── CONFIRM MODAL ── */
+let modalCallback=null;
+function showConfirm(title,msg,onConfirm){
+    document.getElementById('modal-title').textContent=title;
+    document.getElementById('modal-msg').textContent=msg;
+    document.getElementById('modal-confirm-btn').onclick=()=>{ hideModal(); onConfirm(); };
+    document.getElementById('confirm-modal').style.display='flex';
+    modalCallback=onConfirm;
+}
+function modalCancel(){ hideModal(); }
+function hideModal(){ document.getElementById('confirm-modal').style.display='none'; modalCallback=null; }
+
+function clearEmpInv(name){
+    showConfirm('Clear Invoice History', `Remove all invoice records for ${name}? This cannot be undone.`, ()=>{
+        delete empInvoices[name]; save(); renderRevenue();
+    });
+}
+
+function clearAllShifts(){
+    showConfirm('Clear Shift History', 'Remove ALL shift history for all employees? This cannot be undone.', ()=>{
+        shifts=[]; clockedIn={};
+        save(); renderShiftTable(); renderShiftLog(); renderEmployees(); renderClockedIn(); renderRevenue(); renderWhosIn();
+    });
+}
+
+function renderShiftTable(){
+    const tbody=document.getElementById('shift-table-body');
+    const all=shifts.slice().reverse();
+    if(!all.length){ tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-dim);padding:1rem">No shifts recorded.</td></tr>`; return; }
+    tbody.innerHTML=all.map(s=>`<tr>
+        <td>${s.name}</td>
+        <td>${fdt(s.clockIn)}</td>
+        <td>${s.clockOut?fdt(s.clockOut):'<span style="color:var(--amber)">Active</span>'}</td>
+        <td class="dur">${s.clockOut?fd(s.clockOut-s.clockIn):'—'}</td>
+    </tr>`).join('');
+}
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+    load();
+    calcMats();
+    populateSelects();
+    renderStats();
+    renderEmployees();
+    renderShiftLog();
+    renderInvoice();
+    renderWhosIn();
+    document.getElementById('repair-counter').value=repairCounter;
+    // Live update Who's In every second
+    setInterval(()=>{ renderWhosIn(); renderClockedIn(); }, 1000);
+});
+</script>
 </body>
 </html>
