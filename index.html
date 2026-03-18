@@ -599,6 +599,33 @@
     </div>
 </div>
 
+<script type="module">
+// ── FIREBASE ──
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDVhhWx4J8t6O7ZVJ7w6rjSPcuYL7aLauc",
+    authDomain: "beekers-garage.firebaseapp.com",
+    databaseURL: "https://beekers-garage-default-rtdb.firebaseio.com",
+    projectId: "beekers-garage",
+    storageBucket: "beekers-garage.firebasestorage.app",
+    messagingSenderId: "654420598942",
+    appId: "1:654420598942:web:46d1c91ade720f9b251b8f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+// Expose to global scope so the rest of the script can use them
+window._fbSet = (path, data) => set(ref(db, path), data);
+window._fbListen = (path, cb) => onValue(ref(db, path), snap => cb(snap.val()));
+
+// Signal that Firebase is ready
+window._fbReady = true;
+window.dispatchEvent(new Event('fb-ready'));
+</script>
+
 <script>
 /* ── DATA ── */
 const employees = [
@@ -651,38 +678,54 @@ let empInvoices={};   // {name:[{id,name,desc,price,ts}]}
 let shifts=[];        // [{name,clockIn,clockOut}]
 let clockedIn={};     // {name:timestamp}
 
-/* ── PERSIST ── */
+/* ── PERSIST (Firebase) ── */
 function save() {
-    try {
-        localStorage.setItem('bg2-inv',    JSON.stringify(invoiceItems));
-        localStorage.setItem('bg2-cnt',    repairCounter.toString());
-        localStorage.setItem('bg2-ic',     invoiceCounter.toString());
-        localStorage.setItem('bg2-empinv', JSON.stringify(empInvoices));
-        localStorage.setItem('bg2-shifts', JSON.stringify(shifts));
-        localStorage.setItem('bg2-ci',     JSON.stringify(clockedIn));
-        localStorage.setItem('bg2-am',     activeMechanic);
-    } catch(e){}
+    if (!window._fbSet) return;
+    window._fbSet('invoiceItems',   invoiceItems);
+    window._fbSet('repairCounter',  repairCounter);
+    window._fbSet('invoiceCounter', invoiceCounter);
+    window._fbSet('empInvoices',    empInvoices);
+    window._fbSet('shifts',         shifts);
+    window._fbSet('clockedIn',      clockedIn);
+    window._fbSet('activeMechanic', activeMechanic);
 }
-function load() {
-    try {
-        const a=localStorage.getItem('bg2-inv'),    b=localStorage.getItem('bg2-cnt'),
-              c=localStorage.getItem('bg2-ic'),     d=localStorage.getItem('bg2-empinv'),
-              e=localStorage.getItem('bg2-shifts'), f=localStorage.getItem('bg2-ci'),
-              g=localStorage.getItem('bg2-am');
-        if(a) invoiceItems=JSON.parse(a);
-        if(b) repairCounter=parseInt(b);
-        if(c) invoiceCounter=parseInt(c);
-        if(d){
-            empInvoices=JSON.parse(d);
-            // Migrate: drop any old flat-item records that predate the invoice-record format
-            Object.keys(empInvoices).forEach(k=>{
-                empInvoices[k]=empInvoices[k].filter(r=>r.invoiceTotal!==undefined);
-            });
-        }
-        if(e) shifts=JSON.parse(e);
-        if(f) clockedIn=JSON.parse(f);
-        if(g) activeMechanic=g;
-    } catch(e){}
+
+function setupListeners() {
+    // Each listener fires immediately with current value, then on every change
+    window._fbListen('invoiceItems', val => {
+        invoiceItems = val || [];
+        renderInvoice();
+    });
+    window._fbListen('repairCounter', val => {
+        repairCounter = val || 0;
+        document.getElementById('repair-counter').value = repairCounter;
+    });
+    window._fbListen('invoiceCounter', val => {
+        invoiceCounter = val || 1;
+    });
+    window._fbListen('empInvoices', val => {
+        empInvoices = val || {};
+        // Migrate old flat records
+        Object.keys(empInvoices).forEach(k => {
+            empInvoices[k] = empInvoices[k].filter(r => r.invoiceTotal !== undefined);
+        });
+    });
+    window._fbListen('shifts', val => {
+        shifts = val || [];
+        renderShiftLog();
+        renderShiftTable();
+    });
+    window._fbListen('clockedIn', val => {
+        clockedIn = val || {};
+        renderEmployees();
+        renderWhosIn();
+        renderClockedIn();
+    });
+    window._fbListen('activeMechanic', val => {
+        activeMechanic = val || '';
+        document.getElementById('active-mechanic').value = activeMechanic;
+        updateActiveMechanic(false);
+    });
 }
 
 /* ── NAV ── */
@@ -1203,8 +1246,8 @@ function renderShiftTable(){
 }
 
 /* ── INIT ── */
-document.addEventListener('DOMContentLoaded',()=>{
-    load();
+function initApp() {
+    setupListeners();
     calcMats();
     populateSelects();
     renderStats();
@@ -1212,9 +1255,17 @@ document.addEventListener('DOMContentLoaded',()=>{
     renderShiftLog();
     renderInvoice();
     renderWhosIn();
-    document.getElementById('repair-counter').value=repairCounter;
-    // Live update Who's In every second
+    document.getElementById('repair-counter').value = repairCounter;
+    // Live update Who's In timer every second
     setInterval(()=>{ renderWhosIn(); renderClockedIn(); }, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window._fbReady) {
+        initApp();
+    } else {
+        window.addEventListener('fb-ready', initApp, { once: true });
+    }
 });
 </script>
 </body>
