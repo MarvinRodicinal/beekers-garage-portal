@@ -34,6 +34,44 @@
             --brand-red:   #c0392b;
         }
 
+        /* ── LIGHT MODE ── */
+        body.light {
+            --bg:        #f0f4ee;
+            --surface:   #ffffff;
+            --surface2:  #f5f7f3;
+            --surface3:  #eaf0e6;
+            --border:    #cddbc6;
+            --border2:   #b5ccac;
+            --text:      #1a2e14;
+            --text-mid:  #4a6b40;
+            --text-dim:  #8aaa80;
+            --red-dim:   #fde8e8;
+            --green-dim: #dcf5e5;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 0.3rem 0.75rem;
+            color: rgba(240,236,228,0.7);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        body.light .theme-toggle { border-color: rgba(26,46,20,0.2); color: rgba(26,46,20,0.6); }
+        body.light .theme-toggle:hover { background: rgba(26,46,20,0.08); color: var(--text); }
+
         html { scroll-behavior: smooth; }
         body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
         body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.6; }
@@ -305,6 +343,7 @@
             <button class="nav-btn" onclick="showPage('boss',this)">🔒 Boss</button>
         </nav>
         <span class="portal-tag">EMPLOYEE PORTAL // INTERNAL USE ONLY</span>
+        <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
         <div id="user-info" style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
             <img id="user-avatar" src="" alt="" style="width:32px;height:32px;border-radius:50%;border:2px solid var(--brand-red);display:none;">
             <div>
@@ -524,7 +563,7 @@
                     <button class="quick-btn" onclick="quickAdd('Screwdriver Set',100)">Screwdriver Set<span class="quick-btn-price">$100 ea.</span></button>
                     <button class="quick-btn" onclick="quickAdd('Large Repair Kit',800)">Large Repair Kit<span class="quick-btn-price">$800 ea.</span></button>
                     <button class="quick-btn" onclick="quickAdd('Heavy Cutters',800)">Heavy Cutters<span class="quick-btn-price">$800 ea.</span></button>
-                    <button class="quick-btn" onclick="quickAdd('Advanced Lockpick',1750)">Adv. Lockpick<span class="quick-btn-price">$1,750 ea.</span></button>
+                    <button class="quick-btn" onclick="quickAdd('Advanced Lockpick',1250)">Adv. Lockpick<span class="quick-btn-price">$1,250 ea.</span></button>
                     <button class="quick-btn" onclick="quickAdd('Manhole Remover',3000)">Manhole Remover<span class="quick-btn-price">$3,000 ea.</span></button>
                 </div>
             </div>
@@ -1051,6 +1090,21 @@ function setupListeners() {
     window._fbListen('lastAutoReset', val => {
         lastAutoReset = val || null;
     });
+}
+
+/* ── THEME ── */
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    document.getElementById('theme-btn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+    localStorage.setItem('bg-theme', isLight ? 'light' : 'dark');
+}
+
+function loadTheme() {
+    const saved = localStorage.getItem('bg-theme');
+    if(saved === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('theme-btn').textContent = '🌙 Dark';
+    }
 }
 
 /* ── NAV ── */
@@ -1874,6 +1928,7 @@ function renderShiftTable(){
 
 /* ── INIT ── */
 function initApp() {
+    loadTheme();
     setupListeners();
     calcMats();
     populateSelects();
