@@ -437,6 +437,8 @@
                     <option value="Licked Behave">Licked Behave — Senior Mechanic</option>
                     <option value="Dec Behave">Dec Behave — Senior Mechanic</option>
                     <option value="Josue Perez">Josue Perez — Mechanic</option>
+                    <option value="Benjamin Dejo">Benjamin Dejo — Mechanic</option>
+                    <option value="Michael Hills">Michael Hills — Mechanic</option>
                     <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
                     <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
                     <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
@@ -559,44 +561,58 @@
     <div class="dir-layout">
         <div class="clockin-panel">
             <div class="panel-title" style="margin-bottom:1rem;">Clock In / Out</div>
-            <label class="field-label" for="clockin-name">Your Name</label>
-            <select class="clockin-name-select" id="clockin-name" onchange="updateClockBtn()">
-                <option value="">— Select name —</option>
-                <option value="Marvin Rodicinal">Marvin Rodicinal — Owner</option>
-                <option value="JP Purp">JP Purp — Owner</option>
-                <option value="Rod Purp">Rod Purp — Head Mechanic</option>
-                <option value="Ali Monky">Ali Monky — Head Mechanic</option>
-                <option value="Marvel Krasnova">Marvel Krasnova — Head Mechanic</option>
-                <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
-                <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
-                <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
-                <option value="Licked Behave">Licked Behave — Senior Mechanic</option>
-                <option value="Dec Behave">Dec Behave — Senior Mechanic</option>
-                <option value="Josue Perez">Josue Perez — Mechanic</option>
-                <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
-                <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
-                <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
-                <option value="Clyde Foster">Clyde Foster — Trial Mechanic</option>
-                <option value="David Brooks">David Brooks — Trial Mechanic</option>
-                <option value="Erik Menendez">Erik Menendez — Trial Mechanic</option>
-                <option value="Frank Sizzler">Frank Sizzler — Trial Mechanic</option>
-                <option value="Fredrick Murphy">Fredrick Murphy — Trial Mechanic</option>
-                <option value="George McBride">George McBride — Trial Mechanic</option>
-                <option value="Gordo Waxfeen">Gordo Waxfeen — Trial Mechanic</option>
-                <option value="Harry Grey">Harry Grey — Trial Mechanic</option>
-                <option value="Johnny Hems">Johnny Hems — Trial Mechanic</option>
-                <option value="Jordan Banks">Jordan Banks — Trial Mechanic</option>
-                <option value="Lana Love">Lana Love — Trial Mechanic</option>
-                <option value="Luie Lemmon">Luie Lemmon — Trial Mechanic</option>
-                <option value="Luka Michaels">Luka Michaels — Trial Mechanic</option>
-                <option value="Maeve Collins">Maeve Collins — Trial Mechanic</option>
-                <option value="Meelo Jones">Meelo Jones — Trial Mechanic</option>
-                <option value="Roux Garcia">Roux Garcia — Trial Mechanic</option>
-                <option value="Ryan Hernandez">Ryan Hernandez — Trial Mechanic</option>
-                <option value="Sanity Cherry">Sanity Cherry — Trial Mechanic</option>
-                <option value="Jimmy Bellum">Jimmy Bellum — Trial Mechanic</option>
-            </select>
-            <button class="clockin-btn in" id="clockin-btn" onclick="toggleClock()">Clock In</button>
+
+            <!-- Own clock in/out — auto-filled from Discord login -->
+            <div id="own-clockin-section">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.5rem;">Your Shift</div>
+                <div id="own-clockin-name" style="font-weight:600;font-size:1rem;color:var(--text);margin-bottom:0.75rem;">—</div>
+                <button class="clockin-btn in" id="own-clockin-btn" onclick="toggleOwnClock()">Clock In</button>
+            </div>
+
+            <!-- Management override — only shown to Owners and Head Mechanics -->
+            <div id="mgmt-clockin-section" style="display:none;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:0.5rem;">Clock In/Out Employee</div>
+                <select class="clockin-name-select" id="clockin-name" onchange="updateClockBtn()" style="margin-bottom:0.5rem;">
+                    <option value="">— Select employee —</option>
+                    <option value="Marvin Rodicinal">Marvin Rodicinal — Owner</option>
+                    <option value="JP Purp">JP Purp — Owner</option>
+                    <option value="Rod Purp">Rod Purp — Head Mechanic</option>
+                    <option value="Ali Monky">Ali Monky — Head Mechanic</option>
+                    <option value="Marvel Krasnova">Marvel Krasnova — Head Mechanic</option>
+                    <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
+                    <option value="Carlito Jarito">Carlito Jarito — Senior Mechanic</option>
+                    <option value="Anita Fajita">Anita Fajita — Senior Mechanic</option>
+                    <option value="Licked Behave">Licked Behave — Senior Mechanic</option>
+                    <option value="Dec Behave">Dec Behave — Senior Mechanic</option>
+                    <option value="Josue Perez">Josue Perez — Mechanic</option>
+                    <option value="Benjamin Dejo">Benjamin Dejo — Mechanic</option>
+                    <option value="Michael Hills">Michael Hills — Mechanic</option>
+                    <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
+                    <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
+                    <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
+                    <option value="Clyde Foster">Clyde Foster — Trial Mechanic</option>
+                    <option value="David Brooks">David Brooks — Trial Mechanic</option>
+                    <option value="Erik Menendez">Erik Menendez — Trial Mechanic</option>
+                    <option value="Frank Sizzler">Frank Sizzler — Trial Mechanic</option>
+                    <option value="Fredrick Murphy">Fredrick Murphy — Trial Mechanic</option>
+                    <option value="George McBride">George McBride — Trial Mechanic</option>
+                    <option value="Gordo Waxfeen">Gordo Waxfeen — Trial Mechanic</option>
+                    <option value="Harry Grey">Harry Grey — Trial Mechanic</option>
+                    <option value="Johnny Hems">Johnny Hems — Trial Mechanic</option>
+                    <option value="Jordan Banks">Jordan Banks — Trial Mechanic</option>
+                    <option value="Lana Love">Lana Love — Trial Mechanic</option>
+                    <option value="Luie Lemmon">Luie Lemmon — Trial Mechanic</option>
+                    <option value="Luka Michaels">Luka Michaels — Trial Mechanic</option>
+                    <option value="Maeve Collins">Maeve Collins — Trial Mechanic</option>
+                    <option value="Meelo Jones">Meelo Jones — Trial Mechanic</option>
+                    <option value="Roux Garcia">Roux Garcia — Trial Mechanic</option>
+                    <option value="Ryan Hernandez">Ryan Hernandez — Trial Mechanic</option>
+                    <option value="Sanity Cherry">Sanity Cherry — Trial Mechanic</option>
+                    <option value="Jimmy Bellum">Jimmy Bellum — Trial Mechanic</option>
+                </select>
+                <button class="clockin-btn in" id="clockin-btn" onclick="toggleClock()">Clock In</button>
+            </div>
+
             <div class="shift-log">
                 <div class="shift-log-title">Today's Shifts</div>
                 <div id="shift-log-list"><div class="no-shifts">No shifts recorded yet.</div></div>
@@ -828,6 +844,8 @@ const employees = [
     { name:"Licked Behave",     rank:"Senior Mechanic" },
     { name:"Dec Behave",        rank:"Senior Mechanic" },
     { name:"Josue Perez",       rank:"Mechanic" },
+    { name:"Benjamin Dejo",     rank:"Mechanic" },
+    { name:"Michael Hills",     rank:"Mechanic" },
     { name:"Craig Homes",       rank:"Trial Mechanic" },
     { name:"Ben ShiestyKraves", rank:"Trial Mechanic" },
     { name:"Chicken Joe",       rank:"Trial Mechanic" },
@@ -874,8 +892,37 @@ let lastAutoReset=null;   // timestamp of last weekly auto-reset
 // Map Discord display names to employee names in the directory.
 // Keys should match exactly what appears as user.displayName after Discord login.
 const DISCORD_MAP = {
-    'the.omar':     'Marvin Rodicinal',
-    'maybach.9097': 'JP Purp',
+    'the.omar':         'Marvin Rodicinal',
+    'maybach.9097':     'JP Purp',
+    'lukec9934':        'Rod Purp',
+    'fuckyalltbh':      'Josue Perez',
+    'doomdollas':       'Doom Dollas',
+    'larsinal':         'Craig Homes',
+    'protodotwav':      'Ben ShiestyKraves',
+    'jakeypoo324':      'Carlito Jarito',
+    '_aust_':           'Chicken Joe',
+    'dreader':          'Clyde Foster',
+    'lanro_25':         'George McBride',
+    'johnfeelstheway':  'Johnny Hems',
+    'bobadafett33':     'Luie Lemmon',
+    'bounding25':       'Luka Michaels',
+    'banlist':          'Meelo Jones',
+    'rythemotoguy':     'Ryan Hernandez',
+    'victorvalo':       'Jimmy Bellum',
+    'yougotlicked123':  'Licked Behave',
+    'aliawad':          'Ali Monky',
+    'jimothycakes':     'Anita Fajita',
+    'ashlynees':        'Benjamin Dejo',
+    'twitzoh':          'Erik Menendez',
+    'mister.mc':        'Harry Grey',
+    'iconicjai20._':    'Jordan Banks',
+    'madzalinka':       'Lana Love',
+    'mcfluffyballz':    'Maeve Collins',
+    'lynnmarvel':       'Marvel Krasnova',
+    'michaelhills':     'Michael Hills',
+    'luxroux':          'Roux Garcia',
+    'nyx.vr':           'Sanity Cherry',
+    'dec_behave':       'Dec Behave',
     // Add more as employees log in:
     // 'discordusername': 'Employee Name As In Directory',
 };
@@ -905,12 +952,26 @@ function onUserSignedIn(user) {
 
     if(mappedName){
         activeMechanic = mappedName;
+        // Lock active mechanic — can't be changed
         const sel = document.getElementById('active-mechanic');
-        if(sel) sel.value = mappedName;
+        if(sel){ sel.value = mappedName; sel.disabled = true; }
         updateActiveMechanic(false);
-        const clockSel = document.getElementById('clockin-name');
-        if(clockSel) clockSel.value = mappedName;
-        updateClockBtn();
+
+        // Own clock-in section
+        const ownName = document.getElementById('own-clockin-name');
+        if(ownName) ownName.textContent = mappedName;
+        updateOwnClockBtn();
+
+        // Show management section only for Owners and Head Mechanics
+        const isManagement = emp && (emp.rank === 'Owner' || emp.rank === 'Head Mechanic');
+        const mgmtSection = document.getElementById('mgmt-clockin-section');
+        if(mgmtSection) mgmtSection.style.display = isManagement ? 'block' : 'none';
+    } else {
+        // Not mapped — show name selector as fallback
+        const ownName = document.getElementById('own-clockin-name');
+        if(ownName) ownName.textContent = 'Not mapped — contact the boss';
+        const ownBtn = document.getElementById('own-clockin-btn');
+        if(ownBtn){ ownBtn.disabled = true; ownBtn.style.opacity = '0.4'; }
     }
 }
 
@@ -971,6 +1032,7 @@ function setupListeners() {
         renderEmployees();
         renderWhosIn();
         renderClockedIn();
+        updateOwnClockBtn();
     });
     window._fbListen('activeMechanic', val => {
         activeMechanic = val || '';
@@ -1271,6 +1333,33 @@ function renderWhosIn() {
             </div>
         </div>`;
     }).join('');
+}
+
+function updateOwnClockBtn() {
+    const btn = document.getElementById('own-clockin-btn');
+    if(!btn) return;
+    if(clockedIn[activeMechanic]){
+        btn.textContent = 'Clock Out';
+        btn.className = 'clockin-btn out';
+    } else {
+        btn.textContent = 'Clock In';
+        btn.className = 'clockin-btn in';
+    }
+}
+
+function toggleOwnClock() {
+    if(!activeMechanic) return;
+    if(!Array.isArray(shifts)) shifts = Object.values(shifts||{});
+    if(clockedIn[activeMechanic]){
+        const shift = shifts.find(s => s.name === activeMechanic && !s.clockOut);
+        if(shift) shift.clockOut = Date.now();
+        delete clockedIn[activeMechanic];
+    } else {
+        clockedIn[activeMechanic] = Date.now();
+        shifts.push({ name: activeMechanic, clockIn: Date.now(), clockOut: null });
+    }
+    updateOwnClockBtn();
+    save(); renderShiftLog(); renderEmployees(); renderWhosIn();
 }
 
 function toggleClock() {
@@ -1765,7 +1854,7 @@ function initApp() {
     // Re-populate selects after Firebase listeners settle
     setTimeout(() => { populateSelects(); checkWeeklyReset(); }, 800);
     // Live update every second
-    setInterval(()=>{ renderWhosIn(); renderClockedIn(); renderShiftTable(); }, 1000);
+    setInterval(()=>{ renderWhosIn(); renderClockedIn(); renderShiftTable(); updateOwnClockBtn(); }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
