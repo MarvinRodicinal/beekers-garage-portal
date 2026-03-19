@@ -486,12 +486,21 @@
                         <option value="repair">Car Repair</option>
                         <option value="car-upgrades">Car Upgrades</option>
                         <option value="degradation">Degradation</option>
+                        <option disabled style="color:var(--text-dim);font-size:0.8rem;">── Free Repairs ──</option>
+                        <option value="free-pd">🚔 Police Department — Free</option>
+                        <option value="free-ems">🚑 EMS — Free</option>
+                        <option value="free-upnatom">🍔 Up-N-Atom — Free</option>
                     </select>
                 </div>
                 <div id="repair-section" class="field-group" style="display:none">
                     <label class="field-label" for="repair-materials">Materials Used</label>
                     <input type="number" class="field-input" id="repair-materials" placeholder="0" min="0" oninput="calcRepair()" onkeypress="enterAdd(event)">
                     <div class="calc-preview" id="repair-price">Invoice → $<span id="repair-amount">0</span> <span style="color:var(--text-dim);font-size:0.75rem">(mats × $10 + $100 flat)</span></div>
+                </div>
+                <div id="free-repair-section" class="field-group" style="display:none">
+                    <div class="calc-preview" style="display:block;background:var(--green-dim);border-color:var(--green);color:#86efac;">
+                        ✓ Free Repair — $0.00 &nbsp;<span style="font-size:0.75rem;color:#4ade80;" id="free-repair-company-label"></span>
+                    </div>
                 </div>
                 <div id="stock-price-section" class="field-group" style="display:none">
                     <label class="field-label" for="stock-price">Stock Price ($)</label>
@@ -1127,12 +1136,18 @@ function updatePartnership() {
 
 /* ── INVOICE ── */
 function togglePriceInput() {
-    const t=document.getElementById('service-type').value;
-    document.getElementById('repair-section').style.display      =t==='repair'      ?'block':'none';
-    document.getElementById('stock-price-section').style.display =t==='car-upgrades'?'block':'none';
-    document.getElementById('scrap-amount-section').style.display=t==='degradation' ?'block':'none';
-    ['repair-price','upgrade-price','degradation-price'].forEach(id=>document.getElementById(id).style.display='none');
-    ['repair-materials','stock-price','scrap-amount'].forEach(id=>document.getElementById(id).value='');
+    const t = document.getElementById('service-type').value;
+    const isFree = t.startsWith('free-');
+    document.getElementById('repair-section').style.display        = t==='repair'       ? 'block' : 'none';
+    document.getElementById('stock-price-section').style.display   = t==='car-upgrades' ? 'block' : 'none';
+    document.getElementById('scrap-amount-section').style.display  = t==='degradation'  ? 'block' : 'none';
+    document.getElementById('free-repair-section').style.display   = isFree             ? 'block' : 'none';
+    ['repair-price','upgrade-price','degradation-price'].forEach(id => document.getElementById(id).style.display='none');
+    ['repair-materials','stock-price','scrap-amount'].forEach(id => document.getElementById(id).value='');
+    if(isFree) {
+        const labels = { 'free-pd':'Police Department', 'free-ems':'EMS', 'free-upnatom':'Up-N-Atom' };
+        document.getElementById('free-repair-company-label').textContent = `(${labels[t]})`;
+    }
 }
 function calcRepair(){const m=n('repair-materials'),el=document.getElementById('repair-price');if(m>0){document.getElementById('repair-amount').textContent=(m*10+100).toFixed(2);el.style.display='block';}else el.style.display='none';}
 function calcUpgrade(){
@@ -1150,9 +1165,25 @@ function calcDegradation(){const s=n('scrap-amount'),el=document.getElementById(
 function enterAdd(e){if(e.key==='Enter')addService();}
 
 function addService() {
-    const t=document.getElementById('service-type').value;
+    const t = document.getElementById('service-type').value;
     if(!t) return alert('Please select a service type.');
-    let name,price,desc;
+    let name, price, desc;
+
+    if(t.startsWith('free-')) {
+        const companyNames = { 'free-pd':'Police Department', 'free-ems':'EMS', 'free-upnatom':'Up-N-Atom' };
+        const emojis       = { 'free-pd':'🚔', 'free-ems':'🚑', 'free-upnatom':'🍔' };
+        const company = companyNames[t];
+        name  = `${emojis[t]} Free Repair — ${company}`;
+        price = 0;
+        desc  = `Complimentary repair for ${company}`;
+        const item = { id:invoiceCounter++, name, desc, price, serviceType:'free-repair', company, ts:Date.now() };
+        invoiceItems.push(item);
+        renderInvoice(); save();
+        document.getElementById('service-type').value = '';
+        togglePriceInput();
+        return;
+    }
+
     if(t==='repair'){
         const m=n('repair-materials'); if(!m||m<=0) return alert('Enter a valid materials amount.');
         name='Car Repair'; price=m*10+100; desc=`${m} materials × $10 + $100 flat fee`;
