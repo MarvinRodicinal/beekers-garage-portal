@@ -1139,9 +1139,14 @@ function onUserSignedIn(user) {
 
     if(mappedName){
         activeMechanic = mappedName;
+        // Set You Are locally — never from Firebase
         const sel = document.getElementById('active-mechanic');
         if(sel){ sel.value = mappedName; sel.disabled = true; }
-        updateActiveMechanic(false);
+        // Force the badge to show the name
+        const badge = document.getElementById('active-badge');
+        const badgeName = document.getElementById('active-badge-name');
+        if(badge) badge.style.display = 'inline-flex';
+        if(badgeName) badgeName.textContent = mappedName;
         const ownName = document.getElementById('own-clockin-name');
         if(ownName) ownName.textContent = mappedName;
         updateOwnClockBtn();
