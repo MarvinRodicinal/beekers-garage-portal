@@ -486,50 +486,10 @@
     <div class="invoice-layout">
         <div>
             <div class="mechanic-selector">
-                <label for="active-mechanic">You Are</label>
-                <select id="active-mechanic" onchange="updateActiveMechanic()">
-                    <option value="">— Select your name —</option>
-                    <option value="Marvin Rodicinal">Marvin Rodicinal — Owner</option>
-                    <option value="JP Purp">JP Purp — Owner</option>
-                    <option value="Rod Purp">Rod Purp — Head Mechanic</option>
-                    <option value="Ali Monky">Ali Monky — Head Mechanic</option>
-                    <option value="Marvel Krasnova">Marvel Krasnova — Head Mechanic</option>
-                    <option value="Doom Dollas">Doom Dollas — Legacy Mechanic</option>
-                    <option value="Josue Perez">Josue Perez — Mechanic</option>
-                    <option value="Carlito Jarito">Carlito Jarito — Trial Mechanic</option>
-                    <option value="Anita Fajita">Anita Fajita — Trial Mechanic</option>
-                    <option value="Licked Behave">Licked Behave — Trial Mechanic</option>
-                    <option value="Dec Behave">Dec Behave — Trial Mechanic</option>
-                    <option value="Benjamin Dejo">Benjamin Dejo — Trial Mechanic</option>
-                    <option value="Michael Hills">Michael Hills — Trial Mechanic</option>
-                    <option value="Craig Homes">Craig Homes — Trial Mechanic</option>
-                    <option value="Ben ShiestyKraves">Ben ShiestyKraves — Trial Mechanic</option>
-                    <option value="Chicken Joe">Chicken Joe — Trial Mechanic</option>
-                    <option value="Clyde Foster">Clyde Foster — Trial Mechanic</option>
-                    <option value="David Brooks">David Brooks — Trial Mechanic</option>
-                    <option value="Erik Menendez">Erik Menendez — Trial Mechanic</option>
-                    <option value="Frank Sizzler">Frank Sizzler — Trial Mechanic</option>
-                    <option value="Fredrick Murphy">Fredrick Murphy — Trial Mechanic</option>
-                    <option value="George McBride">George McBride — Trial Mechanic</option>
-                    <option value="Gordo Waxfeen">Gordo Waxfeen — Trial Mechanic</option>
-                    <option value="Harry Grey">Harry Grey — Trial Mechanic</option>
-                    <option value="Johnny Hems">Johnny Hems — Trial Mechanic</option>
-                    <option value="Jordan Banks">Jordan Banks — Trial Mechanic</option>
-                    <option value="Lana Love">Lana Love — Trial Mechanic</option>
-                    <option value="Luie Lemmon">Luie Lemmon — Trial Mechanic</option>
-                    <option value="Luka Michaels">Luka Michaels — Trial Mechanic</option>
-                    <option value="Maeve Collins">Maeve Collins — Trial Mechanic</option>
-                    <option value="Meelo Jones">Meelo Jones — Trial Mechanic</option>
-                    <option value="Roux Garcia">Roux Garcia — Trial Mechanic</option>
-                    <option value="Ryan Hernandez">Ryan Hernandez — Trial Mechanic</option>
-                    <option value="Sanity Cherry">Sanity Cherry — Trial Mechanic</option>
-                    <option value="Jimmy Bellum">Jimmy Bellum — Trial Mechanic</option>
-                    <option value="Mag PQX">Mag PQX — Trial Mechanic</option>
-                </select>
-                <span class="active-mechanic-badge" id="active-badge" style="display:none">
-                    <span class="active-dot"></span><span id="active-badge-name"></span>
-                </span>
-            </div>
+                <label>You Are</label>
+                <span id="active-mechanic-display" style="font-family:'Barlow',sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);">—</span>
+                <input type="hidden" id="active-mechanic" value="">
+            </div></div>
 
             <!-- Partnership Discount -->
             <div style="display:flex;align-items:center;gap:0.75rem;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;padding:0.75rem 1rem;margin-bottom:1rem;flex-wrap:wrap;">
@@ -1140,13 +1100,10 @@ function onUserSignedIn(user) {
     if(mappedName){
         activeMechanic = mappedName;
         // Set You Are locally — never from Firebase
-        const sel = document.getElementById('active-mechanic');
-        if(sel){ sel.value = mappedName; sel.disabled = true; }
-        // Force the badge to show the name
-        const badge = document.getElementById('active-badge');
-        const badgeName = document.getElementById('active-badge-name');
-        if(badge) badge.style.display = 'inline-flex';
-        if(badgeName) badgeName.textContent = mappedName;
+        const display = document.getElementById('active-mechanic-display');
+        if(display) display.textContent = mappedName;
+        const hidden = document.getElementById('active-mechanic');
+        if(hidden) hidden.value = mappedName;
         const ownName = document.getElementById('own-clockin-name');
         if(ownName) ownName.textContent = mappedName;
         updateOwnClockBtn();
@@ -1399,7 +1356,7 @@ const st=(id,v)=>document.getElementById(id).textContent=v;
 /* ── MECHANIC SELECTS ── */
 function populateSelects() {
     const opts = employees.map(e=>`<option value="${e.name}">${e.name} — ${e.rank}</option>`).join('');
-    ['active-mechanic','clockin-name'].forEach(id=>{
+    ['clockin-name'].forEach(id=>{
         const el=document.getElementById(id);
         const placeholder=id==='active-mechanic'?'— Select your name —':'— Select name —';
         el.innerHTML=`<option value="">${placeholder}</option>`+opts;
@@ -1412,17 +1369,12 @@ function populateSelects() {
 }
 
 function updateActiveMechanic(doSave=true) {
-    // Always force back to the Discord-mapped name — never let it be changed
     if(activeMechanic) {
-        const sel = document.getElementById('active-mechanic');
-        if(sel && sel.value !== activeMechanic) sel.value = activeMechanic;
+        const el = document.getElementById('active-mechanic-display');
+        if(el) el.textContent = activeMechanic;
+        const hidden = document.getElementById('active-mechanic');
+        if(hidden) hidden.value = activeMechanic;
     }
-    const badge = document.getElementById('active-badge');
-    if(activeMechanic){
-        badge.style.display = 'inline-flex';
-        document.getElementById('active-badge-name').textContent = activeMechanic;
-    } else { badge.style.display = 'none'; }
-    // Never save activeMechanic to Firebase — it's session-local
 }
 
 /* ── PARTNERSHIPS ── */
