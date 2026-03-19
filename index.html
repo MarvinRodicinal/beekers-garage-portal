@@ -1000,7 +1000,6 @@ function save() {
     window._fbSet('empInvoices',    empInvoices);
     window._fbSet('shifts',         shifts);
     window._fbSet('clockedIn',      clockedIn);
-    window._fbSet('activeMechanic', activeMechanic);
     window._fbSet('payoutHistory',  payoutHistory);
     window._fbSet('lastAutoReset',  lastAutoReset);
 }
@@ -1036,11 +1035,6 @@ function setupListeners() {
         renderWhosIn();
         renderClockedIn();
         updateOwnClockBtn();
-    });
-    window._fbListen('activeMechanic', val => {
-        activeMechanic = val || '';
-        document.getElementById('active-mechanic').value = activeMechanic;
-        updateActiveMechanic(false);
     });
     window._fbListen('payoutHistory', val => {
         payoutHistory = val ? (Array.isArray(val) ? val : Object.values(val)) : [];
@@ -1097,13 +1091,17 @@ function populateSelects() {
 }
 
 function updateActiveMechanic(doSave=true) {
-    activeMechanic=document.getElementById('active-mechanic').value;
-    const badge=document.getElementById('active-badge');
+    // Always force back to the Discord-mapped name — never let it be changed
+    if(activeMechanic) {
+        const sel = document.getElementById('active-mechanic');
+        if(sel && sel.value !== activeMechanic) sel.value = activeMechanic;
+    }
+    const badge = document.getElementById('active-badge');
     if(activeMechanic){
-        badge.style.display='inline-flex';
-        document.getElementById('active-badge-name').textContent=activeMechanic;
-    } else { badge.style.display='none'; }
-    if(doSave) save();
+        badge.style.display = 'inline-flex';
+        document.getElementById('active-badge-name').textContent = activeMechanic;
+    } else { badge.style.display = 'none'; }
+    // Never save activeMechanic to Firebase — it's session-local
 }
 
 /* ── PARTNERSHIPS ── */
